@@ -29,13 +29,13 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-6">
           {/* Brand + Newsletter */}
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-3 mb-4">
+            <Link href="/" className="inline-block mb-4">
               <Image
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Promoshop%20logo%20%281%29-ULOkxaeBgbxEQAGDw1MHJqcCE4bQxC.png"
-                alt="PromoShop"
-                width={160}
-                height={40}
-                className="h-8 w-auto"
+                src="/images/promoshop-logo-full.png"
+                alt="PromoShop - Creative happens here"
+                width={180}
+                height={60}
+                className="h-12 w-auto"
               />
             </Link>
             <p className="text-sm font-visby text-[#666] leading-relaxed mb-6">

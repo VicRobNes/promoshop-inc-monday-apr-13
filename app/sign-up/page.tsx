@@ -49,11 +49,15 @@ export default function SignUpPage() {
   return (
     <div className="min-h-screen bg-[#f9f9f9] flex">
       {/* Left Panel - Branding */}
-      <div className="hidden lg:flex flex-1 bg-white border-r border-[#e5e5e5] items-center justify-center p-12">
+      <div className="hidden lg:flex flex-1 bg-[#f9f9f9] border-r border-[#e5e5e5] items-center justify-center p-12">
         <div className="max-w-md">
-          <div className="w-24 h-24 rounded-full bg-[#ef473f] flex items-center justify-center mb-8">
-            <span className="text-white font-bold text-4xl">ps</span>
-          </div>
+          <Image
+            src="/images/promoshop-logo-full.png"
+            alt="PromoShop - Creative happens here"
+            width={240}
+            height={80}
+            className="h-16 w-auto mb-8"
+          />
           <h2 className="font-montserrat font-bold text-2xl text-[#1a1a1a] mb-4">
             Join PromoShop
           </h2>
@@ -83,11 +87,11 @@ export default function SignUpPage() {
         <div className="w-full max-w-md">
           <Link href="/" className="inline-block mb-8">
             <Image
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Promoshop%20logo%20%281%29-ULOkxaeBgbxEQAGDw1MHJqcCE4bQxC.png"
-              alt="PromoShop"
-              width={200}
-              height={50}
-              className="h-10 w-auto"
+              src="/images/promoshop-logo-full.png"
+              alt="PromoShop - Creative happens here"
+              width={220}
+              height={72}
+              className="h-14 w-auto"
             />
           </Link>
 
