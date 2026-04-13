@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { Eye, EyeOff, ArrowRight } from "lucide-react"
 
@@ -17,13 +18,8 @@ export default function SignInPage() {
     e.preventDefault()
     setError("")
     setIsLoading(true)
-
-    // Simulate authentication - Replace with actual auth logic when backend is configured
     await new Promise(resolve => setTimeout(resolve, 1000))
-
-    // For demo purposes, accept any credentials
     if (email && password) {
-      // Store user info in localStorage for demo
       localStorage.setItem("promoshop_user", JSON.stringify({
         email,
         firstName: email.split("@")[0],
@@ -34,29 +30,28 @@ export default function SignInPage() {
     } else {
       setError("Please enter your email and password")
     }
-    
     setIsLoading(false)
   }
 
   return (
-    <div className="min-h-screen bg-black flex">
+    <div className="min-h-screen bg-[#f9f9f9] flex">
       {/* Left Panel - Form */}
       <div className="flex-1 flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-md">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 mb-12">
-            <div className="w-10 h-10 rounded-full bg-[#ef473f] flex items-center justify-center">
-              <span className="text-white font-bold text-lg">ps</span>
-            </div>
-            <span className="font-bebas text-xl tracking-[0.2em] text-white">
-              PROMOSHOP <span className="text-[#ef473f]">STUDIO</span>
-            </span>
+          <Link href="/" className="inline-block mb-12">
+            <Image
+              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Promoshop%20logo%20%281%29-ULOkxaeBgbxEQAGDw1MHJqcCE4bQxC.png"
+              alt="PromoShop"
+              width={200}
+              height={50}
+              className="h-10 w-auto"
+            />
           </Link>
 
-          <h1 className="font-bebas text-4xl tracking-wide text-white mb-2">
+          <h1 className="font-montserrat font-bold text-3xl text-[#1a1a1a] mb-2">
             Welcome Back
           </h1>
-          <p className="text-[#777] mb-8">
+          <p className="text-[#666] mb-8 font-visby">
             Sign in to your account to manage quotes and access saved information.
           </p>
 
@@ -68,7 +63,7 @@ export default function SignInPage() {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-[10px] font-bold tracking-[0.2em] text-[#777] uppercase mb-2">
+              <label className="block text-xs font-bold tracking-wider text-[#999] uppercase mb-2">
                 Email Address
               </label>
               <input
@@ -76,13 +71,13 @@ export default function SignInPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-[#1f1f1f] border border-[#2e2e2e] text-white px-4 py-3.5 rounded text-sm focus:border-[#ef473f] focus:outline-none transition-colors"
+                className="w-full bg-white border border-[#e5e5e5] text-[#1a1a1a] px-4 py-3.5 rounded text-sm font-visby focus:border-[#ef473f] focus:outline-none transition-colors"
                 placeholder="you@company.com"
               />
             </div>
 
             <div>
-              <label className="block text-[10px] font-bold tracking-[0.2em] text-[#777] uppercase mb-2">
+              <label className="block text-xs font-bold tracking-wider text-[#999] uppercase mb-2">
                 Password
               </label>
               <div className="relative">
@@ -91,13 +86,13 @@ export default function SignInPage() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-[#1f1f1f] border border-[#2e2e2e] text-white px-4 py-3.5 rounded text-sm focus:border-[#ef473f] focus:outline-none transition-colors pr-12"
+                  className="w-full bg-white border border-[#e5e5e5] text-[#1a1a1a] px-4 py-3.5 rounded text-sm font-visby focus:border-[#ef473f] focus:outline-none transition-colors pr-12"
                   placeholder="Enter your password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#777] hover:text-white transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#999] hover:text-[#1a1a1a] transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -106,13 +101,10 @@ export default function SignInPage() {
 
             <div className="flex items-center justify-between">
               <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  className="w-4 h-4 rounded border-[#2e2e2e] bg-[#1f1f1f] text-[#ef473f] focus:ring-[#ef473f] focus:ring-offset-0"
-                />
-                <span className="text-sm text-[#777]">Remember me</span>
+                <input type="checkbox" className="w-4 h-4 rounded border-[#e5e5e5] bg-white text-[#ef473f] focus:ring-[#ef473f]" />
+                <span className="text-sm text-[#666] font-visby">Remember me</span>
               </label>
-              <Link href="/forgot-password" className="text-sm text-[#ef473f] hover:underline">
+              <Link href="#" className="text-sm text-[#ef473f] hover:underline font-visby">
                 Forgot password?
               </Link>
             </div>
@@ -136,17 +128,15 @@ export default function SignInPage() {
             </button>
           </form>
 
-          <div className="mt-8 pt-8 border-t border-[#2e2e2e] text-center">
-            <p className="text-[#777]">
+          <div className="mt-8 pt-8 border-t border-[#e5e5e5] text-center">
+            <p className="text-[#666] font-visby">
               Don&apos;t have an account?{" "}
-              <Link href="/sign-up" className="text-[#ef473f] hover:underline font-semibold">
-                Sign up
-              </Link>
+              <Link href="/sign-up" className="text-[#ef473f] hover:underline font-semibold">Sign up</Link>
             </p>
           </div>
 
           <div className="mt-8 text-center">
-            <Link href="/" className="text-sm text-[#777] hover:text-white transition-colors">
+            <Link href="/" className="text-sm text-[#999] hover:text-[#1a1a1a] transition-colors font-visby">
               Back to Home
             </Link>
           </div>
@@ -154,15 +144,15 @@ export default function SignInPage() {
       </div>
 
       {/* Right Panel - Branding */}
-      <div className="hidden lg:flex flex-1 bg-[#141414] items-center justify-center p-12">
+      <div className="hidden lg:flex flex-1 bg-white border-l border-[#e5e5e5] items-center justify-center p-12">
         <div className="max-w-md text-center">
           <div className="w-24 h-24 rounded-full bg-[#ef473f] flex items-center justify-center mx-auto mb-8">
             <span className="text-white font-bold text-4xl">ps</span>
           </div>
-          <h2 className="font-bebas text-3xl tracking-wide text-white mb-4">
+          <h2 className="font-montserrat font-bold text-2xl text-[#1a1a1a] mb-4">
             Premium Branded Merchandise
           </h2>
-          <p className="text-[#777] leading-relaxed">
+          <p className="text-[#666] leading-relaxed font-visby">
             Access your account to manage quotes, save your favorite products, 
             and auto-fill your information for faster ordering.
           </p>

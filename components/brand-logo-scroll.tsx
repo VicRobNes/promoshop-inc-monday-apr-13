@@ -1,43 +1,43 @@
 "use client"
 
-// Brand logos from PromoShop's offerings
 const brands = [
-  { name: "Patagonia", logo: "/brands/patagonia.svg" },
-  { name: "YETI", logo: "/brands/yeti.svg" },
-  { name: "Stanley", logo: "/brands/stanley.svg" },
-  { name: "JBL", logo: "/brands/jbl.svg" },
-  { name: "Rhone", logo: "/brands/rhone.svg" },
-  { name: "VSSL", logo: "/brands/vssl.svg" },
-  { name: "Marine Layer", logo: "/brands/marine-layer.svg" },
-  { name: "Tentree", logo: "/brands/tentree.svg" },
-  { name: "Cotopaxi", logo: "/brands/cotopaxi.svg" },
-  { name: "Herschel", logo: "/brands/herschel.svg" },
+  { name: "Patagonia" },
+  { name: "YETI" },
+  { name: "Stanley" },
+  { name: "JBL" },
+  { name: "Rhone" },
+  { name: "VSSL" },
+  { name: "Marine Layer" },
+  { name: "Tentree" },
+  { name: "Cotopaxi" },
+  { name: "Herschel" },
+  { name: "The North Face" },
+  { name: "Nike" },
 ]
 
 export function BrandLogoScroll() {
   return (
-    <section className="py-12 bg-black border-y border-[#2e2e2e] overflow-hidden">
-      <div className="mb-8 text-center">
-        <p className="text-[10px] font-bold tracking-[0.3em] text-[#777] uppercase">
+    <section className="py-10 bg-[#f5f5f5] border-y border-[#e5e5e5] overflow-hidden">
+      <div className="mb-6 text-center">
+        <p className="text-xs font-bold tracking-wider text-[#999] uppercase">
           Trusted Brands We Partner With
         </p>
       </div>
       
       <div className="relative">
         {/* Gradient overlays */}
-        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-black to-transparent z-10" />
-        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black to-transparent z-10" />
+        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#f5f5f5] to-transparent z-10" />
+        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#f5f5f5] to-transparent z-10" />
         
         {/* Scrolling container */}
         <div className="flex animate-scroll">
-          {/* First set of logos */}
           {brands.map((brand, index) => (
             <div
               key={`brand-1-${index}`}
               className="flex-shrink-0 mx-8 flex items-center justify-center"
             >
-              <div className="w-32 h-16 flex items-center justify-center bg-[#1f1f1f] rounded-lg px-4">
-                <span className="text-white/60 font-bold text-sm tracking-wider uppercase whitespace-nowrap">
+              <div className="w-32 h-14 flex items-center justify-center bg-white rounded-lg px-4 border border-[#e5e5e5]">
+                <span className="text-[#373a36]/60 font-bold text-sm tracking-wider uppercase whitespace-nowrap">
                   {brand.name}
                 </span>
               </div>
@@ -49,8 +49,8 @@ export function BrandLogoScroll() {
               key={`brand-2-${index}`}
               className="flex-shrink-0 mx-8 flex items-center justify-center"
             >
-              <div className="w-32 h-16 flex items-center justify-center bg-[#1f1f1f] rounded-lg px-4">
-                <span className="text-white/60 font-bold text-sm tracking-wider uppercase whitespace-nowrap">
+              <div className="w-32 h-14 flex items-center justify-center bg-white rounded-lg px-4 border border-[#e5e5e5]">
+                <span className="text-[#373a36]/60 font-bold text-sm tracking-wider uppercase whitespace-nowrap">
                   {brand.name}
                 </span>
               </div>

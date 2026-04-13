@@ -2,23 +2,12 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { Instagram, Linkedin, Facebook, Twitter, ArrowRight } from "lucide-react"
 
-interface FooterProps {
-  variant?: "dark" | "light"
-}
-
-export function Footer({ variant = "dark" }: FooterProps) {
+export function Footer() {
   const [email, setEmail] = useState("")
   const [subscribed, setSubscribed] = useState(false)
-
-  const isDark = variant === "dark"
-  const bgClass = isDark ? "bg-black" : "bg-[#ededed]"
-  const textClass = isDark ? "text-white" : "text-[#111]"
-  const mutedClass = isDark ? "text-[#777]" : "text-[#666]"
-  const borderClass = isDark ? "border-[#2e2e2e]" : "border-[#d0d0d0]"
-  const inputBg = isDark ? "bg-[#1f1f1f]" : "bg-white"
-  const inputBorder = isDark ? "border-[#2e2e2e]" : "border-[#d0d0d0]"
 
   const socialLinks = [
     { name: "Instagram", icon: Instagram, href: "#" },
@@ -35,30 +24,31 @@ export function Footer({ variant = "dark" }: FooterProps) {
   }
 
   return (
-    <footer className={`${bgClass} border-t ${borderClass}`}>
+    <footer className="bg-white border-t border-[#e5e5e5]">
       <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-6">
           {/* Brand + Newsletter */}
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-full bg-[#ef473f] flex items-center justify-center">
-                <span className="text-white font-bold text-lg">ps</span>
-              </div>
-              <span className={`font-bebas text-lg tracking-[0.15em] ${textClass}`}>
-                PROMOSHOP <span className="text-[#ef473f]">STUDIO</span>
-              </span>
+              <Image
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Promoshop%20logo%20%281%29-ULOkxaeBgbxEQAGDw1MHJqcCE4bQxC.png"
+                alt="PromoShop"
+                width={160}
+                height={40}
+                className="h-8 w-auto"
+              />
             </Link>
-            <p className={`text-sm font-visby ${mutedClass} leading-relaxed mb-6`}>
-              Your trusted partner for premium promotional products and branded merchandise.
+            <p className="text-sm font-visby text-[#666] leading-relaxed mb-6">
+              Welcome to our store, where promoting your business is our business. Born from an expertise in building brands, we offer unique, quality promotional products.
             </p>
 
             {/* Newsletter Signup */}
             <div className="mb-6">
-              <h4 className={`text-[10px] font-bold tracking-[0.2em] uppercase ${textClass} mb-3`}>
+              <h4 className="text-xs font-bold tracking-wider uppercase text-[#373a36] mb-3">
                 Stay in the Loop
               </h4>
               {subscribed ? (
-                <p className="text-sm text-[#3ecf8e] font-semibold">Thanks for subscribing!</p>
+                <p className="text-sm text-[#6abf4b] font-semibold">Thanks for subscribing!</p>
               ) : (
                 <form onSubmit={handleNewsletterSubmit} className="flex gap-2">
                   <input
@@ -67,7 +57,7 @@ export function Footer({ variant = "dark" }: FooterProps) {
                     placeholder="your@email.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className={`flex-1 ${inputBg} border ${inputBorder} ${textClass} px-4 py-2.5 rounded-full text-sm font-visby focus:border-[#ef473f] focus:outline-none transition-colors placeholder:${mutedClass}`}
+                    className="flex-1 bg-[#f5f5f5] border border-[#e5e5e5] text-[#1a1a1a] px-4 py-2.5 rounded-full text-sm font-visby focus:border-[#ef473f] focus:outline-none transition-colors placeholder:text-[#999]"
                   />
                   <button
                     type="submit"
@@ -88,7 +78,7 @@ export function Footer({ variant = "dark" }: FooterProps) {
                   href={social.href}
                   aria-label={social.name}
                   title={social.name}
-                  className={`w-10 h-10 rounded-full border ${borderClass} flex items-center justify-center ${mutedClass} hover:text-[#ef473f] hover:border-[#ef473f] transition-colors`}
+                  className="w-10 h-10 rounded-full border border-[#e5e5e5] flex items-center justify-center text-[#666] hover:text-[#ef473f] hover:border-[#ef473f] transition-colors"
                 >
                   <social.icon className="w-5 h-5" />
                 </a>
@@ -98,15 +88,15 @@ export function Footer({ variant = "dark" }: FooterProps) {
 
           {/* Quick Links */}
           <div>
-            <h3 className={`font-bebas text-sm tracking-[0.2em] ${textClass} mb-4`}>
-              QUICK LINKS
+            <h3 className="text-xs font-bold tracking-wider uppercase text-[#373a36] mb-4">
+              Quick Links
             </h3>
             <ul className="space-y-2">
               {["Home", "Studio", "Brands", "My Quote", "About"].map((item) => (
                 <li key={item}>
                   <Link
                     href={item === "Home" ? "/" : `/${item.toLowerCase().replace(" ", "-")}`}
-                    className={`text-sm font-visby ${mutedClass} hover:text-[#ef473f] transition-colors`}
+                    className="text-sm font-visby text-[#666] hover:text-[#ef473f] transition-colors"
                   >
                     {item}
                   </Link>
@@ -115,17 +105,17 @@ export function Footer({ variant = "dark" }: FooterProps) {
             </ul>
           </div>
 
-          {/* Categories */}
+          {/* Collections */}
           <div>
-            <h3 className={`font-bebas text-sm tracking-[0.2em] ${textClass} mb-4`}>
-              CATEGORIES
+            <h3 className="text-xs font-bold tracking-wider uppercase text-[#373a36] mb-4">
+              Collections
             </h3>
             <ul className="space-y-2">
-              {["Drinkware", "Tops", "Jackets", "Tech", "Bags", "Accessories"].map((item) => (
+              {["Technology", "Athleisure", "Work from Home", "Unique Ideas", "Give Back", "Eco-Aware"].map((item) => (
                 <li key={item}>
                   <Link
-                    href={`/studio?category=${item.toLowerCase()}`}
-                    className={`text-sm font-visby ${mutedClass} hover:text-[#ef473f] transition-colors`}
+                    href="/studio"
+                    className="text-sm font-visby text-[#666] hover:text-[#ef473f] transition-colors"
                   >
                     {item}
                   </Link>
@@ -136,29 +126,29 @@ export function Footer({ variant = "dark" }: FooterProps) {
 
           {/* Contact */}
           <div>
-            <h3 className={`font-bebas text-sm tracking-[0.2em] ${textClass} mb-4`}>
-              CONTACT US
+            <h3 className="text-xs font-bold tracking-wider uppercase text-[#373a36] mb-4">
+              Contact Us
             </h3>
             <ul className="space-y-3 font-visby">
-              <li className={`text-sm ${mutedClass}`}>
-                <span className="block font-semibold">Windsor, ON</span>
+              <li className="text-sm text-[#666]">
+                <span className="block font-semibold text-[#373a36]">Windsor, ON</span>
                 <a href="tel:5192523005" className="hover:text-[#ef473f] transition-colors">
                   (519) 252-3005
                 </a>
               </li>
-              <li className={`text-sm ${mutedClass}`}>
-                <span className="block font-semibold">Detroit, MI</span>
+              <li className="text-sm text-[#666]">
+                <span className="block font-semibold text-[#373a36]">Detroit, MI</span>
                 <a href="tel:2483995410" className="hover:text-[#ef473f] transition-colors">
                   (248) 399-5410
                 </a>
               </li>
-              <li className={`text-sm ${mutedClass}`}>
-                <span className="block font-semibold">Toronto, ON</span>
+              <li className="text-sm text-[#666]">
+                <span className="block font-semibold text-[#373a36]">Toronto, ON</span>
                 <a href="tel:4166288512" className="hover:text-[#ef473f] transition-colors">
                   (416) 628-8512
                 </a>
               </li>
-              <li className={`text-sm ${mutedClass} pt-2`}>
+              <li className="text-sm text-[#666] pt-2">
                 <a href="mailto:info@promoshopinc.com" className="hover:text-[#ef473f] transition-colors">
                   info@promoshopinc.com
                 </a>
@@ -167,28 +157,34 @@ export function Footer({ variant = "dark" }: FooterProps) {
           </div>
         </div>
 
+        {/* ADA Compliance */}
+        <div className="mt-8 p-4 bg-[#f9f9f9] border border-[#e5e5e5] rounded-lg">
+          <p className="text-xs text-[#666] font-visby leading-relaxed">
+            <strong className="text-[#373a36]">ADA Compliance:</strong> We understand the importance of accessibility for all visitors to our website and it is something we take seriously. We are working on bringing this website in-line with WCAG 2.1 A, AA standards to ensure we provide an experience that is accessible to all. Your patience is appreciated as we work through these changes.
+          </p>
+        </div>
+
         {/* Bottom Bar */}
-        <div className={`mt-12 pt-8 border-t ${borderClass} flex flex-col md:flex-row justify-between items-center gap-4`}>
-          <p className={`text-sm font-visby ${mutedClass}`}>
+        <div className="mt-8 pt-8 border-t border-[#e5e5e5] flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-sm font-visby text-[#999]">
             &copy; {new Date().getFullYear()} PromoShop Inc. All rights reserved.
           </p>
-          {/* Legal Links */}
           <div className="flex gap-6">
             <Link 
               href="#" 
-              className={`text-sm font-visby ${mutedClass} hover:text-[#ef473f] transition-colors underline-offset-2 hover:underline`}
+              className="text-sm font-visby text-[#999] hover:text-[#ef473f] transition-colors underline-offset-2 hover:underline"
             >
               Privacy Policy
             </Link>
             <Link 
               href="#" 
-              className={`text-sm font-visby ${mutedClass} hover:text-[#ef473f] transition-colors underline-offset-2 hover:underline`}
+              className="text-sm font-visby text-[#999] hover:text-[#ef473f] transition-colors underline-offset-2 hover:underline"
             >
               Terms of Service
             </Link>
             <Link 
               href="#" 
-              className={`text-sm font-visby ${mutedClass} hover:text-[#ef473f] transition-colors underline-offset-2 hover:underline`}
+              className="text-sm font-visby text-[#999] hover:text-[#ef473f] transition-colors underline-offset-2 hover:underline"
             >
               Shipping Policy
             </Link>

@@ -1,138 +1,134 @@
 import Link from "next/link"
-import { ArrowRight, Palette, Truck, HeadphonesIcon, Shield } from "lucide-react"
+import Image from "next/image"
+import { ArrowRight } from "lucide-react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { BrandLogoScroll } from "@/components/brand-logo-scroll"
 import { ContactSection } from "@/components/contact-section"
 
+const collections = [
+  { name: "No Holds Promo", href: "/studio" },
+  { name: "2025 New Products", href: "/studio" },
+  { name: "Get Outdoors", href: "/studio" },
+  { name: "Distinctive Drinkware", href: "/studio" },
+  { name: "Golf", href: "/studio" },
+  { name: "Eco-Aware", href: "/studio" },
+  { name: "Self-Care", href: "/studio" },
+]
+
+const categories = [
+  { name: "Technology", description: "Stay connected and make an impression! From wireless chargers to laptop sleeves, we have the latest and greatest products to keep you and your business running smoothly and attracting attention.", href: "/studio" },
+  { name: "Athleisure", description: "Premium activewear and casual apparel that blends comfort with style. Perfect for corporate wellness programs and branded team gear.", href: "/studio" },
+  { name: "Work from Home", description: "Elevate the remote work experience with premium desk accessories, tech gear, and comfort items that keep your brand top of mind.", href: "/studio" },
+  { name: "Unique Ideas", description: "Stand out from the crowd with creative, unexpected promotional products that leave a lasting impression on your audience.", href: "/studio" },
+  { name: "Give Back", description: "Products with purpose. Support meaningful causes while promoting your brand with socially responsible merchandise.", href: "/studio" },
+]
+
+const teamMembers = [
+  { name: "Phil Duym", role: "Owner & President" },
+  { name: "Amy Duquette", role: "Account Executive" },
+  { name: "Ania Wlodarkiewicz", role: "Account Executive" },
+  { name: "Alex Cyrenne", role: "Account Executive" },
+]
+
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-black text-white">
-      <Header variant="dark" />
+    <div className="min-h-screen bg-white text-[#1a1a1a]">
+      <Header />
       
-      {/* Hero Section */}
-      <section className="relative py-24 lg:py-32 px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl">
-          <div className="max-w-3xl">
-            <p className="text-[10px] font-bold tracking-[0.4em] text-[#ef473f] uppercase mb-4">
-              Promoshop Studio
-            </p>
-            <h1 className="font-montserrat font-extrabold text-5xl lg:text-7xl tracking-tight leading-tight mb-6 uppercase">
-              Premium Merch<br />
-              <span className="text-[#ef473f]">For Premium Brands</span>
-            </h1>
-            <p className="text-lg text-[#999] leading-relaxed mb-8 max-w-xl font-visby">
-              Curated collections from the world&apos;s best brands. From Patagonia jackets to YETI drinkware, 
-              we make branded merchandise effortless.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <Link
-                href="/brands"
-                className="inline-flex items-center gap-2 bg-[#ef473f] text-white px-8 py-4 font-bold uppercase tracking-wider text-sm rounded hover:opacity-90 transition-opacity"
-              >
-                Browse Our Brands
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                href="/brands"
-                className="inline-flex items-center gap-2 border border-white/30 text-white px-8 py-4 font-bold uppercase tracking-wider text-sm rounded hover:border-white transition-colors"
-              >
-                View All Brands
-              </Link>
-            </div>
-          </div>
+      {/* Collection Navigation */}
+      <section className="border-b border-[#e5e5e5] overflow-x-auto">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8 flex items-center gap-6 py-3">
+          {collections.map((col) => (
+            <Link
+              key={col.name}
+              href={col.href}
+              className="text-sm font-semibold text-[#666] hover:text-[#ef473f] transition-colors whitespace-nowrap"
+            >
+              {col.name}
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Welcome Section */}
+      <section className="py-16 lg:py-20 px-6 lg:px-8">
+        <div className="mx-auto max-w-4xl text-center">
+          <Link href="/" className="inline-block mb-6">
+            <Image
+              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Promoshop%20logo%20%281%29-ULOkxaeBgbxEQAGDw1MHJqcCE4bQxC.png"
+              alt="PromoShop"
+              width={280}
+              height={70}
+              className="h-16 w-auto mx-auto"
+            />
+          </Link>
+          <p className="text-base lg:text-lg text-[#666] leading-relaxed font-visby max-w-3xl mx-auto">
+            Welcome to our store, where promoting your business is our business. Born from an expertise in building brands, we offer unique, quality promotional products, excellent service, and customer-focused marketing. From our office, we are your premier source for branding solutions! We present our Signature Collection, carefully selected promotional items that we refresh daily with the newest, hottest, and trendiest products.
+          </p>
         </div>
       </section>
 
       {/* Brand Logo Scroll */}
       <BrandLogoScroll />
 
-      {/* THIS SITE WAS BUILT TO MAKE YOUR LIFE EASIER Section */}
-      <section className="py-24 lg:py-32 px-6 lg:px-8 bg-black">
+      {/* Category Sections */}
+      {categories.map((category, index) => (
+        <section key={category.name} className={`py-16 lg:py-20 px-6 lg:px-8 ${index % 2 === 0 ? "bg-[#f9f9f9]" : "bg-white"}`}>
+          <div className="mx-auto max-w-7xl">
+            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+              <div className="max-w-2xl">
+                <h2 className="font-montserrat font-bold text-2xl lg:text-3xl text-[#1a1a1a] mb-4">
+                  {category.name}
+                </h2>
+                <p className="text-[#666] leading-relaxed font-visby mb-6">
+                  {category.description}
+                </p>
+                <Link
+                  href={category.href}
+                  className="inline-flex items-center gap-2 bg-[#ef473f] text-white px-6 py-3 font-bold uppercase tracking-wider text-sm rounded hover:opacity-90 transition-opacity"
+                >
+                  Browse Collection
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+      ))}
+
+      {/* Meet Our Team */}
+      <section className="py-16 lg:py-20 px-6 lg:px-8 bg-white">
         <div className="mx-auto max-w-7xl">
-          <div className="text-center mb-16">
-            <h2 className="font-bebas text-4xl lg:text-6xl tracking-wide mb-4">
-              This Site Was Built To Make<br />
-              <span className="text-[#ef473f]">Your Life Easier</span>
+          <div className="text-center mb-12">
+            <h2 className="font-montserrat font-bold text-2xl lg:text-3xl text-[#1a1a1a] mb-3">
+              Meet Our Team
             </h2>
-            <p className="text-[#777] max-w-2xl mx-auto leading-relaxed font-visby">
-              We handle the complexity so you can focus on what matters. Premium products, 
-              streamlined ordering, and dedicated support at every step.
+            <p className="text-[#666] font-visby">
+              These industry experts will ensure your promotions shine.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {/* Feature 1 */}
-            <div className="bg-[#141414] border border-[#2e2e2e] rounded-lg p-8 text-center hover:border-[#ef473f] transition-colors">
-              <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-[#ef473f]/10 flex items-center justify-center">
-                <Palette className="w-8 h-8 text-[#ef473f]" />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {teamMembers.map((member) => (
+              <div key={member.name} className="text-center">
+                <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-[#f0f0f0] flex items-center justify-center border border-[#e5e5e5]">
+                  <span className="font-montserrat font-bold text-xl text-[#ef473f]">
+                    {member.name.split(" ").map(n => n[0]).join("")}
+                  </span>
+                </div>
+                <h3 className="font-montserrat font-bold text-sm text-[#1a1a1a]">{member.name}</h3>
+                <p className="text-xs text-[#999] font-visby">{member.role}</p>
               </div>
-              <h3 className="font-bebas text-xl tracking-wider mb-3">Curated Selection</h3>
-              <p className="text-sm text-[#777] leading-relaxed">
-                Hand-picked products from premium brands that represent quality and style.
-              </p>
-            </div>
-
-            {/* Feature 2 */}
-            <div className="bg-[#141414] border border-[#2e2e2e] rounded-lg p-8 text-center hover:border-[#ef473f] transition-colors">
-              <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-[#ef473f]/10 flex items-center justify-center">
-                <Shield className="w-8 h-8 text-[#ef473f]" />
-              </div>
-              <h3 className="font-bebas text-xl tracking-wider mb-3">Quality Guaranteed</h3>
-              <p className="text-sm text-[#777] leading-relaxed">
-                Every product meets our strict quality standards. Your brand deserves the best.
-              </p>
-            </div>
-
-            {/* Feature 3 */}
-            <div className="bg-[#141414] border border-[#2e2e2e] rounded-lg p-8 text-center hover:border-[#ef473f] transition-colors">
-              <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-[#ef473f]/10 flex items-center justify-center">
-                <Truck className="w-8 h-8 text-[#ef473f]" />
-              </div>
-              <h3 className="font-bebas text-xl tracking-wider mb-3">Fast Delivery</h3>
-              <p className="text-sm text-[#777] leading-relaxed">
-                Efficient production and shipping to meet your deadlines, every time.
-              </p>
-            </div>
-
-            {/* Feature 4 */}
-            <div className="bg-[#141414] border border-[#2e2e2e] rounded-lg p-8 text-center hover:border-[#ef473f] transition-colors">
-              <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-[#ef473f]/10 flex items-center justify-center">
-                <HeadphonesIcon className="w-8 h-8 text-[#ef473f]" />
-              </div>
-              <h3 className="font-bebas text-xl tracking-wider mb-3">Dedicated Support</h3>
-              <p className="text-sm text-[#777] leading-relaxed">
-                Personal account managers ready to help you every step of the way.
-              </p>
-            </div>
+            ))}
           </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 px-6 lg:px-8 bg-[#141414]">
-        <div className="mx-auto max-w-4xl text-center">
-          <h2 className="font-bebas text-3xl lg:text-5xl tracking-wide mb-4">
-            Ready to Elevate Your Brand?
-          </h2>
-          <p className="text-[#777] mb-8 max-w-xl mx-auto">
-            Browse our curated collection and start building your quote today. 
-            No minimums on quotes, just premium products.
-          </p>
-          <Link
-            href="/studio"
-            className="inline-flex items-center gap-2 bg-[#ef473f] text-white px-10 py-4 font-bold uppercase tracking-wider text-sm rounded hover:opacity-90 transition-opacity"
-          >
-            Explore the Studio
-            <ArrowRight className="w-4 h-4" />
-          </Link>
         </div>
       </section>
 
       {/* Contact Section */}
       <ContactSection />
 
-      <Footer variant="dark" />
+      <Footer />
     </div>
   )
 }

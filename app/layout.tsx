@@ -6,7 +6,7 @@ import './globals.css'
 
 const montserrat = Montserrat({ 
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
+  weight: ['400', '500', '600', '700', '800', '900'],
   variable: '--font-montserrat'
 })
 
@@ -23,8 +23,8 @@ const dmSans = DM_Sans({
 })
 
 export const metadata: Metadata = {
-  title: 'PromoShop Studio | Premium Promotional Products',
-  description: 'Your one-stop destination for premium branded merchandise. Browse curated collections from top brands like Patagonia, YETI, JBL, and more.',
+  title: 'PromoShop Inc | Promotional Products',
+  description: 'Welcome to our store, where promoting your business is our business. Born from an expertise in building brands, we offer unique, quality promotional products, excellent service, and customer-focused marketing.',
   generator: 'v0.app',
   icons: {
     icon: [
@@ -51,8 +51,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${montserrat.variable} ${bebasNeue.variable} ${dmSans.variable}`}>
-      <body className="font-sans antialiased bg-black">
+    <html lang="en" className={`bg-background ${montserrat.variable} ${bebasNeue.variable} ${dmSans.variable}`}>
+      <body className="font-sans antialiased bg-background text-foreground">
         <QuoteProvider>
           {children}
         </QuoteProvider>

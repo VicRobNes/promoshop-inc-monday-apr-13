@@ -59,7 +59,7 @@ export default function StudioPage() {
 
   return (
     <div className="min-h-screen bg-[#ededed] text-[#111] font-montserrat">
-      <Header variant="light" />
+      <Header />
 
       {/* Header Section */}
       <div className="px-6 lg:px-10 pt-10 pb-5 flex flex-wrap justify-between items-end gap-4">
@@ -213,7 +213,7 @@ export default function StudioPage() {
         </Link>
       </div>
 
-      <Footer variant="light" />
+      <Footer />
 
       {/* Product Detail Modal */}
       <ProductDetailModal
