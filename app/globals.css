@@ -35,7 +35,7 @@
   --border: #2e2e2e;
   --input: #1f1f1f;
   --ring: #ef473f;
-  --radius: 0.375rem;
+  --radius: 0.75rem;
   
   /* Studio/Light theme */
   --studio-bg: #ededed;
@@ -99,6 +99,34 @@
 
 .animate-scroll:hover {
   animation-play-state: paused;
+}
+
+/* Shimmer animation for CTA buttons */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.shimmer-cta {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-cta::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.15) 50%,
+    transparent 100%
+  );
+  animation: shimmer 3s ease-in-out infinite;
 }
 
 /* Bebas Neue for headers */
