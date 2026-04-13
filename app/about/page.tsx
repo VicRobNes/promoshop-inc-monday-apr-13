@@ -41,7 +41,7 @@ const values = [
   {
     icon: Globe,
     title: "North American Reach",
-    description: "Serving businesses across Canada and the USA with dedicated local support."
+    description: "Serving businesses across North America with dedicated local support."
   },
   {
     icon: Heart,
@@ -206,7 +206,7 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-[#141414] border border-[#2e2e2e] rounded-lg p-8 text-center">
               <h3 className="font-bebas text-xl tracking-wider mb-2">Windsor, ON</h3>
-              <p className="text-sm text-[#777] mb-2">Canada Headquarters</p>
+              <p className="text-sm text-[#777] mb-2">Headquarters</p>
               <a href="tel:5192523005" className="text-[#ef473f] hover:underline">
                 (519) 252-3005
               </a>

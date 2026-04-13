@@ -45,11 +45,11 @@ export function ContactSection() {
                 <h3 className="font-bebas text-lg tracking-wider mb-2">Phone</h3>
                 <div className="space-y-1 text-[#999]">
                   <p>
-                    <span className="text-[#777] text-sm">Canada: </span>
+                    <span className="text-[#777] text-sm">Windsor: </span>
                     <a href="tel:5192523005" className="hover:text-[#ef473f] transition-colors">(519) 252-3005</a>
                   </p>
                   <p>
-                    <span className="text-[#777] text-sm">USA: </span>
+                    <span className="text-[#777] text-sm">Detroit: </span>
                     <a href="tel:2483995410" className="hover:text-[#ef473f] transition-colors">(248) 399-5410</a>
                   </p>
                   <p>
@@ -82,9 +82,9 @@ export function ContactSection() {
               <div>
                 <h3 className="font-bebas text-lg tracking-wider mb-2">Locations</h3>
                 <div className="text-[#999] space-y-2">
-                  <p>Windsor, ON, Canada</p>
-                  <p>Detroit, MI, USA</p>
-                  <p>Toronto, ON, Canada</p>
+                  <p>Windsor, ON</p>
+                  <p>Detroit, MI</p>
+                  <p>Toronto, ON</p>
                 </div>
               </div>
             </div>

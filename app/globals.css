@@ -45,7 +45,9 @@
 }
 
 @theme inline {
-  --font-sans: 'Montserrat', 'Bebas Neue', sans-serif;
+  --font-sans: 'Montserrat', sans-serif;
+  /* TODO: Add Visby CF font files - using fallback for now */
+  --font-visby: 'Visby CF', 'DM Sans', sans-serif;
   --font-mono: 'DM Sans', monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -110,7 +112,12 @@
   font-family: 'DM Sans', sans-serif;
 }
 
-/* Montserrat for Studio catalog */
+/* Montserrat for headings and nav */
 .font-montserrat {
   font-family: 'Montserrat', sans-serif;
+}
+
+/* TODO: Add Visby CF font files - using DM Sans as fallback */
+.font-visby {
+  font-family: 'Visby CF', 'DM Sans', sans-serif;
 }

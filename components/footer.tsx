@@ -1,4 +1,7 @@
+"use client"
+
 import Link from "next/link"
+import { Instagram, Linkedin, Facebook, Twitter } from "lucide-react"
 
 interface FooterProps {
   variant?: "dark" | "light"
@@ -10,6 +13,13 @@ export function Footer({ variant = "dark" }: FooterProps) {
   const textClass = isDark ? "text-white" : "text-[#111]"
   const mutedClass = isDark ? "text-[#777]" : "text-[#666]"
   const borderClass = isDark ? "border-[#2e2e2e]" : "border-[#d0d0d0]"
+
+  const socialLinks = [
+    { name: "Instagram", icon: Instagram, href: "#" },
+    { name: "LinkedIn", icon: Linkedin, href: "#" },
+    { name: "Facebook", icon: Facebook, href: "#" },
+    { name: "Twitter", icon: Twitter, href: "#" },
+  ]
 
   return (
     <footer className={`${bgClass} border-t ${borderClass}`}>
@@ -25,9 +35,22 @@ export function Footer({ variant = "dark" }: FooterProps) {
                 PROMOSHOP
               </span>
             </Link>
-            <p className={`text-sm ${mutedClass} leading-relaxed`}>
+            <p className={`text-sm font-visby ${mutedClass} leading-relaxed mb-4`}>
               Your trusted partner for premium promotional products and branded merchandise.
             </p>
+            {/* Social Media Icons */}
+            <div className="flex gap-3">
+              {socialLinks.map((social) => (
+                <a
+                  key={social.name}
+                  href={social.href}
+                  aria-label={social.name}
+                  className={`w-10 h-10 rounded-full border ${borderClass} flex items-center justify-center ${mutedClass} hover:text-[#ef473f] hover:border-[#ef473f] transition-colors`}
+                >
+                  <social.icon className="w-5 h-5" />
+                </a>
+              ))}
+            </div>
           </div>
 
           {/* Quick Links */}
@@ -40,7 +63,7 @@ export function Footer({ variant = "dark" }: FooterProps) {
                 <li key={item}>
                   <Link
                     href={item === "Home" ? "/" : `/${item.toLowerCase().replace(" ", "-")}`}
-                    className={`text-sm ${mutedClass} hover:text-[#ef473f] transition-colors`}
+                    className={`text-sm font-visby ${mutedClass} hover:text-[#ef473f] transition-colors`}
                   >
                     {item}
                   </Link>
@@ -59,7 +82,7 @@ export function Footer({ variant = "dark" }: FooterProps) {
                 <li key={item}>
                   <Link
                     href={`/studio?category=${item.toLowerCase()}`}
-                    className={`text-sm ${mutedClass} hover:text-[#ef473f] transition-colors`}
+                    className={`text-sm font-visby ${mutedClass} hover:text-[#ef473f] transition-colors`}
                   >
                     {item}
                   </Link>
@@ -73,21 +96,21 @@ export function Footer({ variant = "dark" }: FooterProps) {
             <h3 className={`font-bebas text-sm tracking-[0.2em] ${textClass} mb-4`}>
               CONTACT US
             </h3>
-            <ul className="space-y-2">
+            <ul className="space-y-2 font-visby">
               <li className={`text-sm ${mutedClass}`}>
-                <span className="block">Canada</span>
+                <span className="block">Windsor, ON</span>
                 <a href="tel:5192523005" className="hover:text-[#ef473f] transition-colors">
                   (519) 252-3005
                 </a>
               </li>
               <li className={`text-sm ${mutedClass}`}>
-                <span className="block">USA</span>
+                <span className="block">Detroit, MI</span>
                 <a href="tel:2483995410" className="hover:text-[#ef473f] transition-colors">
                   (248) 399-5410
                 </a>
               </li>
               <li className={`text-sm ${mutedClass}`}>
-                <span className="block">Toronto</span>
+                <span className="block">Toronto, ON</span>
                 <a href="tel:4166288512" className="hover:text-[#ef473f] transition-colors">
                   (416) 628-8512
                 </a>
@@ -96,16 +119,30 @@ export function Footer({ variant = "dark" }: FooterProps) {
           </div>
         </div>
 
+        {/* Bottom Bar */}
         <div className={`mt-12 pt-8 border-t ${borderClass} flex flex-col md:flex-row justify-between items-center gap-4`}>
-          <p className={`text-sm ${mutedClass}`}>
+          <p className={`text-sm font-visby ${mutedClass}`}>
             &copy; {new Date().getFullYear()} PromoShop Inc. All rights reserved.
           </p>
+          {/* Legal Links */}
           <div className="flex gap-6">
-            <Link href="/privacy" className={`text-sm ${mutedClass} hover:text-[#ef473f] transition-colors`}>
+            <Link 
+              href="#" 
+              className={`text-sm font-visby ${mutedClass} hover:text-[#ef473f] transition-colors underline-offset-2 hover:underline`}
+            >
               Privacy Policy
             </Link>
-            <Link href="/terms" className={`text-sm ${mutedClass} hover:text-[#ef473f] transition-colors`}>
+            <Link 
+              href="#" 
+              className={`text-sm font-visby ${mutedClass} hover:text-[#ef473f] transition-colors underline-offset-2 hover:underline`}
+            >
               Terms of Service
+            </Link>
+            <Link 
+              href="#" 
+              className={`text-sm font-visby ${mutedClass} hover:text-[#ef473f] transition-colors underline-offset-2 hover:underline`}
+            >
+              Shipping Policy
             </Link>
           </div>
         </div>

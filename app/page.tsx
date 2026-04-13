@@ -17,27 +17,27 @@ export default function HomePage() {
             <p className="text-[10px] font-bold tracking-[0.4em] text-[#ef473f] uppercase mb-4">
               Promoshop Studio
             </p>
-            <h1 className="font-bebas text-5xl lg:text-7xl tracking-wide leading-tight mb-6">
-              Premium Branded Merchandise<br />
-              <span className="text-[#ef473f]">Made Simple</span>
+            <h1 className="font-montserrat font-extrabold text-5xl lg:text-7xl tracking-tight leading-tight mb-6 uppercase">
+              Premium Merch<br />
+              <span className="text-[#ef473f]">For Premium Brands</span>
             </h1>
-            <p className="text-lg text-[#999] leading-relaxed mb-8 max-w-xl">
+            <p className="text-lg text-[#999] leading-relaxed mb-8 max-w-xl font-visby">
               Curated collections from the world&apos;s best brands. From Patagonia jackets to YETI drinkware, 
               we make branded merchandise effortless.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link
-                href="/studio"
+                href="/brands"
                 className="inline-flex items-center gap-2 bg-[#ef473f] text-white px-8 py-4 font-bold uppercase tracking-wider text-sm rounded hover:opacity-90 transition-opacity"
               >
-                Browse Products
+                Browse Our Brands
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
-                href="/my-quote"
+                href="/brands"
                 className="inline-flex items-center gap-2 border border-white/30 text-white px-8 py-4 font-bold uppercase tracking-wider text-sm rounded hover:border-white transition-colors"
               >
-                Start a Quote
+                View All Brands
               </Link>
             </div>
           </div>
@@ -55,7 +55,7 @@ export default function HomePage() {
               This Site Was Built To Make<br />
               <span className="text-[#ef473f]">Your Life Easier</span>
             </h2>
-            <p className="text-[#777] max-w-2xl mx-auto leading-relaxed">
+            <p className="text-[#777] max-w-2xl mx-auto leading-relaxed font-visby">
               We handle the complexity so you can focus on what matters. Premium products, 
               streamlined ordering, and dedicated support at every step.
             </p>
