@@ -103,6 +103,30 @@ export const BRANDS: Brand[] = [
     description: "World-renowned athletic wear. Innovation and performance in every product.",
     categories: ["Tops", "Activewear", "Accessories"],
     featured: false
+  },
+  {
+    id: "peter-millar",
+    name: "Peter Millar",
+    slug: "peter-millar",
+    description: "Luxury golf and lifestyle apparel. Refined performance wear with timeless elegance and exceptional quality.",
+    categories: ["Tops", "Polos", "Golf"],
+    featured: true
+  },
+  {
+    id: "johnnie-o",
+    name: "Johnnie-O",
+    slug: "johnnie-o",
+    description: "West Coast lifestyle brand blending California cool with East Coast prep. Comfortable, versatile performance wear.",
+    categories: ["Tops", "Casual", "Golf"],
+    featured: true
+  },
+  {
+    id: "helly-hansen",
+    name: "Helly Hansen",
+    slug: "helly-hansen",
+    description: "Norwegian heritage brand for sailing and outdoor adventures. Professional-grade protection with clean marine design.",
+    categories: ["Jackets", "Outerwear", "Marine"],
+    featured: true
   }
 ]
 
