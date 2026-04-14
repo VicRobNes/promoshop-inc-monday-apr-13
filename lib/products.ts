@@ -146,9 +146,9 @@ export const PRODUCTS: Product[] = [
     brands: ["Peter Millar"],
     gender: ["Womens"],
     colours: [
-      { name: "Navy", hex: "#1b2a4a", images: ["https://www.drivingi.com/images/product/LE0EK43-Navy.jpg"] },
-      { name: "White", hex: "#ffffff", images: ["https://www.drivingi.com/images/product/LE0EK43-White.jpg"] },
-      { name: "Black", hex: "#1a1a1a", images: ["https://www.drivingi.com/images/product/LE0EK43-Black.jpg"] }
+      { name: "Navy", hex: "#1b2a4a", images: ["/images/products/peter-millar-raglan-quarter-zip.jpg"] },
+      { name: "White", hex: "#ffffff", images: ["/images/products/peter-millar-raglan-quarter-zip.jpg"] },
+      { name: "Black", hex: "#1a1a1a", images: ["/images/products/peter-millar-raglan-quarter-zip.jpg"] }
     ],
     sizes: ["XS", "S", "M", "L", "XL", "XXL"],
     minQty: 12,
@@ -161,9 +161,9 @@ export const PRODUCTS: Product[] = [
     brands: ["Peter Millar"],
     gender: ["Womens"],
     colours: [
-      { name: "Navy", hex: "#1b2a4a", images: ["https://www.drivingi.com/images/product/PM-ButtonPolo-Navy.jpg"] },
-      { name: "White", hex: "#ffffff", images: ["https://www.drivingi.com/images/product/PM-ButtonPolo-White.jpg"] },
-      { name: "Black", hex: "#1a1a1a", images: ["https://www.drivingi.com/images/product/PM-ButtonPolo-Black.jpg"] }
+      { name: "Navy", hex: "#1b2a4a", images: ["/images/products/peter-millar-button-polo.jpg"] },
+      { name: "White", hex: "#ffffff", images: ["/images/products/peter-millar-button-polo.jpg"] },
+      { name: "Black", hex: "#1a1a1a", images: ["/images/products/peter-millar-button-polo.jpg"] }
     ],
     sizes: ["XS", "S", "M", "L", "XL", "XXL"],
     minQty: 12,
@@ -176,9 +176,9 @@ export const PRODUCTS: Product[] = [
     brands: ["Peter Millar"],
     gender: ["Womens"],
     colours: [
-      { name: "Navy", hex: "#1b2a4a", images: ["https://www.drivingi.com/images/product/LE0EK06S-Navy.jpg"] },
-      { name: "White", hex: "#ffffff", images: ["https://www.drivingi.com/images/product/LE0EK06S-White.jpg"] },
-      { name: "Black", hex: "#1a1a1a", images: ["https://www.drivingi.com/images/product/LE0EK06S-Black.jpg"] }
+      { name: "Navy", hex: "#1b2a4a", images: ["/images/products/peter-millar-sleeveless-polo.jpg"] },
+      { name: "White", hex: "#ffffff", images: ["/images/products/peter-millar-sleeveless-polo.jpg"] },
+      { name: "Black", hex: "#1a1a1a", images: ["/images/products/peter-millar-sleeveless-polo.jpg"] }
     ],
     sizes: ["XS", "S", "M", "L", "XL", "XXL"],
     minQty: 12,
@@ -191,15 +191,15 @@ export const PRODUCTS: Product[] = [
     brands: ["Peter Millar"],
     gender: ["Mens"],
     colours: [
-      { name: "Cottage Blue", hex: "#6b8aa8", images: ["https://www.drivingi.com/images/product/ME0EK40-CottageBlue.jpg"] },
-      { name: "Black", hex: "#1a1a1a", images: ["https://www.drivingi.com/images/product/ME0EK40-Black.jpg"] },
-      { name: "British Grey", hex: "#8c8c8c", images: ["https://www.drivingi.com/images/product/ME0EK40-BritishGrey.jpg"] },
-      { name: "Iron", hex: "#4a4a4a", images: ["https://www.drivingi.com/images/product/ME0EK40-Iron.jpg"] },
-      { name: "Navy", hex: "#1b2a4a", images: ["https://www.drivingi.com/images/product/ME0EK40-Navy.jpg"] },
-      { name: "White", hex: "#ffffff", images: ["https://www.drivingi.com/images/product/ME0EK40-White.jpg"] },
-      { name: "Red", hex: "#c0392b", images: ["https://www.drivingi.com/images/product/ME0EK40-Red.jpg"] },
-      { name: "Blue", hex: "#4472c4", images: ["https://www.drivingi.com/images/product/ME0EK40-Blue.jpg"] },
-      { name: "Green", hex: "#2e7d32", images: ["https://www.drivingi.com/images/product/ME0EK40-Green.jpg"] }
+      { name: "Cottage Blue", hex: "#6b8aa8", images: ["/images/products/peter-millar-perth-quarter-zip.jpg"] },
+      { name: "Black", hex: "#1a1a1a", images: ["/images/products/peter-millar-perth-quarter-zip.jpg"] },
+      { name: "British Grey", hex: "#8c8c8c", images: ["/images/products/peter-millar-perth-quarter-zip.jpg"] },
+      { name: "Iron", hex: "#4a4a4a", images: ["/images/products/peter-millar-perth-quarter-zip.jpg"] },
+      { name: "Navy", hex: "#1b2a4a", images: ["/images/products/peter-millar-perth-quarter-zip.jpg"] },
+      { name: "White", hex: "#ffffff", images: ["/images/products/peter-millar-perth-quarter-zip.jpg"] },
+      { name: "Red", hex: "#c0392b", images: ["/images/products/peter-millar-perth-quarter-zip.jpg"] },
+      { name: "Blue", hex: "#4472c4", images: ["/images/products/peter-millar-perth-quarter-zip.jpg"] },
+      { name: "Green", hex: "#2e7d32", images: ["/images/products/peter-millar-perth-quarter-zip.jpg"] }
     ],
     sizes: ["XS", "S", "M", "L", "XL", "XXL"],
     minQty: 12,
@@ -213,10 +213,10 @@ export const PRODUCTS: Product[] = [
     brands: ["Johnnie-O"],
     gender: ["Mens"],
     colours: [
-      { name: "Wake", hex: "#1e3a5f", images: ["https://www.drivingi.com/images/product/JMLT2920-Wake.jpg"] },
-      { name: "White", hex: "#ffffff", images: ["https://www.drivingi.com/images/product/JMLT2920-White.jpg"] },
-      { name: "Heather Black", hex: "#3a3a3a", images: ["https://www.drivingi.com/images/product/JMLT2920-HeatherBlack.jpg"] },
-      { name: "Seal", hex: "#3d4a4f", images: ["https://www.drivingi.com/images/product/JMLT2920-Seal.jpg"] }
+      { name: "Wake", hex: "#1e3a5f", images: ["/images/products/johnnie-o-course-longsleeve.jpg"] },
+      { name: "White", hex: "#ffffff", images: ["/images/products/johnnie-o-course-longsleeve.jpg"] },
+      { name: "Heather Black", hex: "#3a3a3a", images: ["/images/products/johnnie-o-course-longsleeve.jpg"] },
+      { name: "Seal", hex: "#3d4a4f", images: ["/images/products/johnnie-o-course-longsleeve.jpg"] }
     ],
     sizes: ["XS", "S", "M", "L", "XL", "XXL"],
     minQty: 12,
@@ -229,15 +229,15 @@ export const PRODUCTS: Product[] = [
     brands: ["Johnnie-O"],
     gender: ["Mens"],
     colours: [
-      { name: "White", hex: "#ffffff", images: ["https://www.drivingi.com/images/product/JMST3010-White.jpg"] },
-      { name: "Seal", hex: "#3d4a4f", images: ["https://www.drivingi.com/images/product/JMST3010-Seal.jpg"] },
-      { name: "Wake", hex: "#1e3a5f", images: ["https://www.drivingi.com/images/product/JMST3010-Wake.jpg"] },
-      { name: "Heather Black", hex: "#3a3a3a", images: ["https://www.drivingi.com/images/product/JMST3010-HeatherBlack.jpg"] },
-      { name: "Barrels Blue", hex: "#5b8eb5", images: ["https://www.drivingi.com/images/product/JMST3010-BarrelsBlue.jpg"] },
-      { name: "Malibu", hex: "#f5a623", images: ["https://www.drivingi.com/images/product/JMST3010-Malibu.jpg"] },
-      { name: "Rouge Red", hex: "#a32638", images: ["https://www.drivingi.com/images/product/JMST3010-RougeRed.jpg"] },
-      { name: "Thunder", hex: "#5c5c5c", images: ["https://www.drivingi.com/images/product/JMST3010-Thunder.jpg"] },
-      { name: "Lobster", hex: "#e74c3c", images: ["https://www.drivingi.com/images/product/JMST3010-Lobster.jpg"] }
+      { name: "White", hex: "#ffffff", images: ["/images/products/johnnie-o-course-tshirt.jpg"] },
+      { name: "Seal", hex: "#3d4a4f", images: ["/images/products/johnnie-o-course-tshirt.jpg"] },
+      { name: "Wake", hex: "#1e3a5f", images: ["/images/products/johnnie-o-course-tshirt.jpg"] },
+      { name: "Heather Black", hex: "#3a3a3a", images: ["/images/products/johnnie-o-course-tshirt.jpg"] },
+      { name: "Barrels Blue", hex: "#5b8eb5", images: ["/images/products/johnnie-o-course-tshirt.jpg"] },
+      { name: "Malibu", hex: "#f5a623", images: ["/images/products/johnnie-o-course-tshirt.jpg"] },
+      { name: "Rouge Red", hex: "#a32638", images: ["/images/products/johnnie-o-course-tshirt.jpg"] },
+      { name: "Thunder", hex: "#5c5c5c", images: ["/images/products/johnnie-o-course-tshirt.jpg"] },
+      { name: "Lobster", hex: "#e74c3c", images: ["/images/products/johnnie-o-course-tshirt.jpg"] }
     ],
     sizes: ["XS", "S", "M", "L", "XL", "XXL"],
     minQty: 12,
@@ -251,10 +251,10 @@ export const PRODUCTS: Product[] = [
     brands: ["Helly Hansen"],
     gender: ["Womens"],
     colours: [
-      { name: "White", hex: "#ffffff", images: ["https://www.drivingi.com/images/product/30239-White.jpg"] },
-      { name: "Navy", hex: "#1b2a4a", images: ["https://www.drivingi.com/images/product/30239-Navy.jpg"] },
-      { name: "Ultra Blue", hex: "#0066cc", images: ["https://www.drivingi.com/images/product/30239-UltraBlue.jpg"] },
-      { name: "Magenta 2.0", hex: "#c2185b", images: ["https://www.drivingi.com/images/product/30239-Magenta.jpg"] }
+      { name: "White", hex: "#ffffff", images: ["/images/products/helly-hansen-crew-insulator-womens.jpg"] },
+      { name: "Navy", hex: "#1b2a4a", images: ["/images/products/helly-hansen-crew-insulator-womens.jpg"] },
+      { name: "Ultra Blue", hex: "#0066cc", images: ["/images/products/helly-hansen-crew-insulator-womens.jpg"] },
+      { name: "Magenta 2.0", hex: "#c2185b", images: ["/images/products/helly-hansen-crew-insulator-womens.jpg"] }
     ],
     sizes: ["S", "M", "L", "XL", "XXL"],
     minQty: 12,
