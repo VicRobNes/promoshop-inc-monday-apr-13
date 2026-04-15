@@ -34,7 +34,7 @@ export function Footer() {
             {/* PromoShop Studio logo */}
             <Link href="/" className="inline-block mb-4">
               <Image
-                src="https://raw.githubusercontent.com/VicRobNes/mainmemory/main/Promoshop%20logo%20(2).png"
+                src="/images/mainmemory/promoshop-logo.png"
                 alt="PromoShop Studio"
                 width={180}
                 height={60}

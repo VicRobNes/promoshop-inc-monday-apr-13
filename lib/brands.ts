@@ -17,7 +17,7 @@ export const BRANDS: Brand[] = [
     description: "Outdoor apparel and gear built for adventure. Known for quality, durability, and environmental responsibility.",
     categories: ["Jackets", "Tops", "Vests", "Bags"],
     featured: true,
-    logoUrl: "https://github.com/user-attachments/assets/98c33413-cf96-4f6a-89f8-889ccf990da0",
+    logoUrl: "/images/brands/patagonia.png",
   },
   {
     id: "yeti",
@@ -125,7 +125,7 @@ export const BRANDS: Brand[] = [
     description: "Luxury golf and lifestyle apparel. Refined performance wear with timeless elegance and exceptional quality.",
     categories: ["Tops", "Polos", "Golf"],
     featured: true,
-    logoUrl: "https://github.com/user-attachments/assets/3bbc81b7-ebe0-40d2-9762-51e04cfd44a5",
+    logoUrl: "/images/brands/peter-millar.png",
   },
   {
     id: "johnnie-o",
@@ -143,7 +143,7 @@ export const BRANDS: Brand[] = [
     description: "Norwegian heritage brand for sailing and outdoor adventures. Professional-grade protection with clean marine design.",
     categories: ["Jackets", "Outerwear", "Marine"],
     featured: true,
-    logoUrl: "https://github.com/user-attachments/assets/713359e8-7b1b-467a-b457-4b5ccd98ce3e",
+    logoUrl: "/images/brands/helly-hansen.png",
   },
 ]
 

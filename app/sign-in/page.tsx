@@ -40,7 +40,7 @@ export default function SignInPage() {
         <div className="w-full max-w-md">
           <Link href="/" className="inline-block mb-12">
             <Image
-              src="https://raw.githubusercontent.com/VicRobNes/mainmemory/main/Promoshop%20logo%20(2).png"
+              src="/images/mainmemory/promoshop-logo.png"
               alt="PromoShop Studio"
               width={220}
               height={72}
@@ -148,7 +148,7 @@ export default function SignInPage() {
       <div className="hidden lg:flex flex-1 bg-[#0d0d0d] border-l border-[#2a2a2a] items-center justify-center p-12">
         <div className="max-w-md text-center">
           <Image
-            src="https://raw.githubusercontent.com/VicRobNes/mainmemory/main/Promoshop%20logo%20(2).png"
+            src="/images/mainmemory/promoshop-logo.png"
             alt="PromoShop Studio"
             width={260}
             height={86}
