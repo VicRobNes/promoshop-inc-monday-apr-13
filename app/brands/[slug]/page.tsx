@@ -98,7 +98,6 @@ export default async function BrandPage({ params }: BrandPageProps) {
                 >
                   <ProductCard
                     product={product}
-                    onClick={() => {}}
                   />
                 </Link>
               ))}
