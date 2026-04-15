@@ -1,5 +1,4 @@
 import Link from "next/link"
-import Image from "next/image"
 import { ArrowRight } from "lucide-react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
@@ -47,14 +46,6 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 items-center">
             {/* Text + Logo Side */}
             <div className="py-16 lg:py-24 lg:pr-12">
-              <Image
-                src={HOME_CONTENT.hero.logo}
-                alt={HOME_CONTENT.hero.logoAlt}
-                width={340}
-                height={110}
-                className="h-20 lg:h-24 w-auto mb-8"
-                priority
-              />
               {HOME_CONTENT.hero.body.map((paragraph, i) => (
                 <p
                   key={i}
