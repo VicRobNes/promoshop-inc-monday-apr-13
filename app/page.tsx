@@ -9,35 +9,10 @@ import { HeroSlideshow } from "@/components/home/hero-slideshow"
 import { HOME_CONTENT } from "@/lib/cms/home"
 import { TEAM_MEMBERS } from "@/lib/cms/team"
 
-const collections = [
-  { name: "No Holds Promo", href: "/studio" },
-  { name: "2025 New Products", href: "/studio" },
-  { name: "Get Outdoors", href: "/studio" },
-  { name: "Distinctive Drinkware", href: "/studio" },
-  { name: "Golf", href: "/studio" },
-  { name: "Eco-Aware", href: "/studio" },
-  { name: "Self-Care", href: "/studio" },
-]
-
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-[#111111] text-white">
       <Header />
-
-      {/* Collection Navigation Bar */}
-      <section className="border-b border-[#2a2a2a] overflow-x-auto bg-[#0d0d0d]">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8 flex items-center gap-6 py-3">
-          {collections.map((col) => (
-            <Link
-              key={col.name}
-              href={col.href}
-              className="text-xs font-bold text-[#888] hover:text-[#ef473f] transition-colors whitespace-nowrap uppercase tracking-wider"
-            >
-              {col.name}
-            </Link>
-          ))}
-        </div>
-      </section>
 
       {/* Hero Section with Logo + Slideshow */}
       <section className="relative bg-[#0d0d0d] overflow-hidden">
