@@ -32,21 +32,27 @@ export function Header() {
 
   const LocaleToggle = ({ className = "" }: { className?: string }) => (
     <div className={`inline-flex items-center rounded-full border border-[#e5e5e5] p-0.5 ${className}`} role="group" aria-label="Select region">
-      {(["CAN", "USA"] as const).map((code) => (
-        <button
-          key={code}
-          type="button"
-          onClick={() => setLocale(code)}
-          aria-pressed={locale === code}
-          className={`px-3 py-1 text-[10px] font-bold tracking-wider uppercase rounded-full transition-colors ${
-            locale === code
-              ? "bg-[#ef473f] text-white"
-              : "text-[#373a36] hover:text-[#ef473f]"
-          }`}
-        >
-          {code}
-        </button>
-      ))}
+      <button
+        type="button"
+        onClick={() => setLocale("CAN")}
+        aria-pressed={locale === "CAN"}
+        className={`px-3 py-1 text-[10px] font-bold tracking-wider uppercase rounded-full transition-colors ${
+          locale === "CAN"
+            ? "bg-[#ef473f] text-white"
+            : "text-[#373a36] hover:text-[#ef473f]"
+        }`}
+      >
+        CAN
+      </button>
+      <a
+        href="https://www.promoshopusa.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Visit PromoShop USA website"
+        className="px-3 py-1 text-[10px] font-bold tracking-wider uppercase rounded-full transition-colors text-[#373a36] hover:text-[#ef473f]"
+      >
+        USA
+      </a>
     </div>
   )
 

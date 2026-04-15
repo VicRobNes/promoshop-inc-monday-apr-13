@@ -9,7 +9,7 @@ const MAINMEMORY_RAW = "https://raw.githubusercontent.com/VicRobNes/mainmemory/m
 export const ABOUT_CONTENT = {
   hero: {
     eyebrow: "About Us",
-    heading: "Meet PromoShop",
+    heading: "MEET PROMOSHOP",
     // Best-guess storefront image from Abigail's updated set — if she flags a
     // different file in the Apr 15 review call, just swap the filename here.
     image: `${MAINMEMORY_RAW}/11.png`,
