@@ -5,6 +5,8 @@ import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { useState, useEffect } from "react"
 import { Menu, X, ShoppingBag, Phone, Heart, User } from "lucide-react"
+import { useLocale } from "@/lib/locale-context"
+import { HOME_CONTENT } from "@/lib/cms/home"
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -18,6 +20,7 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
+  const { locale, config, setLocale } = useLocale()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,17 +30,37 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
+  const LocaleToggle = ({ className = "" }: { className?: string }) => (
+    <div className={`inline-flex items-center rounded-full border border-[#e5e5e5] p-0.5 ${className}`} role="group" aria-label="Select region">
+      {(["CAN", "USA"] as const).map((code) => (
+        <button
+          key={code}
+          type="button"
+          onClick={() => setLocale(code)}
+          aria-pressed={locale === code}
+          className={`px-3 py-1 text-[10px] font-bold tracking-wider uppercase rounded-full transition-colors ${
+            locale === code
+              ? "bg-[#ef473f] text-white"
+              : "text-[#373a36] hover:text-[#ef473f]"
+          }`}
+        >
+          {code}
+        </button>
+      ))}
+    </div>
+  )
+
   return (
     <header className={`bg-white ${scrolled ? "shadow-md" : ""} sticky top-0 z-50 transition-all duration-300`}>
       {/* Top utility bar */}
       <div className="bg-[#373a36] text-white">
         <div className="mx-auto max-w-7xl px-6 lg:px-8 flex items-center justify-between py-2">
           <a
-            href="tel:5192523005"
+            href={config.primaryContact.phoneHref}
             className="flex items-center gap-1.5 text-xs font-visby"
           >
             <Phone className="w-3 h-3" />
-            Need help? Give us a call: (519) 252-3005
+            {config.supportLineLabel}
           </a>
           <div className="hidden sm:flex items-center gap-4">
             <Link href="/sign-in" className="flex items-center gap-1.5 text-xs font-visby hover:text-[#ef473f] transition-colors">
@@ -54,11 +77,11 @@ export function Header() {
 
       {/* Main nav */}
       <nav className="mx-auto max-w-7xl flex items-center justify-between px-6 py-3 lg:py-4 lg:px-8 border-b border-[#e5e5e5]">
-        {/* Logo - Full "Creative happens here" version */}
+        {/* Logo — the newly-provided PromoShop studio mark */}
         <Link href="/" className="flex-shrink-0">
           <Image
-            src="/images/promoshop-logo-full.png"
-            alt="PromoShop - Creative happens here"
+            src={HOME_CONTENT.hero.logo}
+            alt={HOME_CONTENT.hero.logoAlt}
             width={220}
             height={72}
             className="h-14 lg:h-16 w-auto"
@@ -88,6 +111,7 @@ export function Header() {
 
         {/* Desktop Actions */}
         <div className="hidden lg:flex lg:items-center lg:gap-4">
+          <LocaleToggle />
           <Link
             href="/my-quote"
             className="shimmer-cta relative flex items-center gap-2 bg-[#ef473f] text-white px-6 py-2.5 text-xs font-bold uppercase tracking-wider rounded-full hover:bg-[#d93e36] transition-colors"
@@ -132,12 +156,16 @@ export function Header() {
               )
             })}
             <div className="pt-4 border-t border-[#e5e5e5] flex flex-col gap-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold tracking-wider uppercase text-[#999]">Region</span>
+                <LocaleToggle />
+              </div>
               <a
-                href="tel:5192523005"
+                href={config.primaryContact.phoneHref}
                 className="flex items-center gap-2 py-2 text-sm font-semibold text-[#666]"
               >
                 <Phone className="w-4 h-4" />
-                (519) 252-3005
+                {config.primaryContact.phone}
               </a>
               <Link
                 href="/my-quote"

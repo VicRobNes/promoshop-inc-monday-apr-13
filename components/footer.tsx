@@ -2,12 +2,13 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import Image from "next/image"
 import { Instagram, Linkedin, Facebook, Twitter, ArrowRight } from "lucide-react"
+import { useLocale } from "@/lib/locale-context"
 
 export function Footer() {
   const [email, setEmail] = useState("")
   const [subscribed, setSubscribed] = useState(false)
+  const { config } = useLocale()
 
   const socialLinks = [
     { name: "Instagram", icon: Instagram, href: "#" },
@@ -29,14 +30,14 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-6">
           {/* Brand + Newsletter */}
           <div className="lg:col-span-2">
+            {/* Text wordmark — the "text version at the footer" Abigail asked us to keep. */}
             <Link href="/" className="inline-block mb-4">
-              <Image
-                src="/images/promoshop-logo-full.png"
-                alt="PromoShop - Creative happens here"
-                width={180}
-                height={60}
-                className="h-12 w-auto"
-              />
+              <span className="font-bebas text-4xl tracking-[0.2em] text-[#373a36]">
+                PROMOSHOP<span className="text-[#ef473f]">.</span>
+              </span>
+              <span className="block text-[11px] font-bold tracking-[0.3em] uppercase text-[#999] mt-1">
+                Creative Happens Here
+              </span>
             </Link>
             <p className="text-sm font-visby text-[#666] leading-relaxed mb-6">
               Welcome to our store, where promoting your business is our business. Born from an expertise in building brands, we offer unique, quality promotional products.
@@ -111,7 +112,7 @@ export function Footer() {
               Collections
             </h3>
             <ul className="space-y-2">
-              {["Technology", "Athleisure", "Work from Home", "Unique Ideas", "Give Back", "Eco-Aware"].map((item) => (
+              {["Drinkware", "Tops", "Jackets", "Tech", "Bags", "Eco-Aware"].map((item) => (
                 <li key={item}>
                   <Link
                     href="/studio"
@@ -124,30 +125,20 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* Contact (locale-aware) */}
           <div>
             <h3 className="text-xs font-bold tracking-wider uppercase text-[#373a36] mb-4">
               Contact Us
             </h3>
             <ul className="space-y-3 font-visby">
-              <li className="text-sm text-[#666]">
-                <span className="block font-semibold text-[#373a36]">Windsor, ON</span>
-                <a href="tel:5192523005" className="hover:text-[#ef473f] transition-colors">
-                  (519) 252-3005
-                </a>
-              </li>
-              <li className="text-sm text-[#666]">
-                <span className="block font-semibold text-[#373a36]">Detroit, MI</span>
-                <a href="tel:2483995410" className="hover:text-[#ef473f] transition-colors">
-                  (248) 399-5410
-                </a>
-              </li>
-              <li className="text-sm text-[#666]">
-                <span className="block font-semibold text-[#373a36]">Toronto, ON</span>
-                <a href="tel:4166288512" className="hover:text-[#ef473f] transition-colors">
-                  (416) 628-8512
-                </a>
-              </li>
+              {config.allContacts.map((contact) => (
+                <li key={contact.phoneHref} className="text-sm text-[#666]">
+                  <span className="block font-semibold text-[#373a36]">{contact.city}, {contact.region}</span>
+                  <a href={contact.phoneHref} className="hover:text-[#ef473f] transition-colors">
+                    {contact.phone}
+                  </a>
+                </li>
+              ))}
               <li className="text-sm text-[#666] pt-2">
                 <a href="mailto:info@promoshopinc.com" className="hover:text-[#ef473f] transition-colors">
                   info@promoshopinc.com

@@ -2,6 +2,7 @@
 
 import { Mail, Phone, MapPin } from "lucide-react"
 import { useState } from "react"
+import { useLocale } from "@/lib/locale-context"
 
 export function ContactSection() {
   const [formData, setFormData] = useState({
@@ -11,6 +12,7 @@ export function ContactSection() {
     message: ""
   })
   const [submitted, setSubmitted] = useState(false)
+  const { config } = useLocale()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -31,7 +33,7 @@ export function ContactSection() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
-          {/* Contact Info */}
+          {/* Contact Info (locale-aware) */}
           <div className="space-y-8">
             <div className="flex items-start gap-4">
               <div className="w-12 h-12 rounded-full bg-[#ef473f]/10 flex items-center justify-center flex-shrink-0">
@@ -40,18 +42,12 @@ export function ContactSection() {
               <div>
                 <h3 className="font-montserrat font-bold text-base text-[#1a1a1a] mb-2">Phone</h3>
                 <div className="space-y-1 text-[#666] font-visby">
-                  <p>
-                    <span className="text-[#999] text-sm">Windsor: </span>
-                    <a href="tel:5192523005" className="hover:text-[#ef473f] transition-colors">(519) 252-3005</a>
-                  </p>
-                  <p>
-                    <span className="text-[#999] text-sm">Detroit: </span>
-                    <a href="tel:2483995410" className="hover:text-[#ef473f] transition-colors">(248) 399-5410</a>
-                  </p>
-                  <p>
-                    <span className="text-[#999] text-sm">Toronto: </span>
-                    <a href="tel:4166288512" className="hover:text-[#ef473f] transition-colors">(416) 628-8512</a>
-                  </p>
+                  {config.allContacts.map((contact) => (
+                    <p key={contact.phoneHref}>
+                      <span className="text-[#999] text-sm">{contact.phoneLabel}: </span>
+                      <a href={contact.phoneHref} className="hover:text-[#ef473f] transition-colors">{contact.phone}</a>
+                    </p>
+                  ))}
                 </div>
               </div>
             </div>
@@ -78,9 +74,9 @@ export function ContactSection() {
               <div>
                 <h3 className="font-montserrat font-bold text-base text-[#1a1a1a] mb-2">Locations</h3>
                 <div className="text-[#666] space-y-1 font-visby">
-                  <p>Windsor, ON</p>
-                  <p>Detroit, MI</p>
-                  <p>Toronto, ON</p>
+                  {config.allContacts.map((contact) => (
+                    <p key={contact.phoneHref}>{contact.city}, {contact.region}</p>
+                  ))}
                 </div>
               </div>
             </div>
