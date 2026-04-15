@@ -1,10 +1,10 @@
 import Link from "next/link"
+import Image from "next/image"
 import { ArrowRight } from "lucide-react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { BrandLogoScroll } from "@/components/brand-logo-scroll"
 import { ContactSection } from "@/components/contact-section"
-import { HeroSlideshow } from "@/components/home/hero-slideshow"
 import { HOME_CONTENT } from "@/lib/cms/home"
 import { TEAM_MEMBERS } from "@/lib/cms/team"
 
@@ -68,8 +68,7 @@ export default function HomePage() {
                 </Link>
               </div>
             </div>
-            {/* Slideshow Side */}
-            <HeroSlideshow slides={HOME_CONTENT.slideshow} />
+
           </div>
         </div>
       </section>
