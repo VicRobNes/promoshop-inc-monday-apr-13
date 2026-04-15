@@ -1,34 +1,11 @@
 "use client"
 
-import { useState } from "react"
-import { HOME_CONTENT, type BrandLogoEntry } from "@/lib/cms/home"
+import { HOME_CONTENT } from "@/lib/cms/home"
 
-function BrandTile({ brand }: { brand: BrandLogoEntry }) {
-  const [errored, setErrored] = useState(false)
-
-  return (
-    <div className="flex-shrink-0 mx-8 flex items-center justify-center">
-      <div className="w-32 h-14 flex items-center justify-center bg-white rounded-lg px-4 border border-[#e5e5e5]">
-        {errored ? (
-          <span className="text-[#373a36]/60 font-bold text-sm tracking-wider uppercase whitespace-nowrap">
-            {brand.name}
-          </span>
-        ) : (
-          // Using plain <img> so onError swaps in the text fallback when the
-          // SVG asset for a brand isn't committed yet.
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={brand.logo}
-            alt={brand.name}
-            className="max-h-10 w-auto object-contain"
-            onError={() => setErrored(true)}
-          />
-        )}
-      </div>
-    </div>
-  )
-}
-
+// NOTE: brand logo SVGs aren't committed yet (see docs/asset-map.md). Until
+// they land we render the brand name as a text tile, matching the visual the
+// previous version of this component used. Once /brands/<slug>.svg files are
+// committed, swap each tile back to a Next.js <Image> using brand.logo.
 export function BrandLogoScroll() {
   const brands = HOME_CONTENT.brandLogos
 
@@ -42,11 +19,29 @@ export function BrandLogoScroll() {
         {/* Scrolling container */}
         <div className="flex animate-scroll">
           {brands.map((brand, index) => (
-            <BrandTile key={`brand-1-${index}`} brand={brand} />
+            <div
+              key={`brand-1-${index}`}
+              className="flex-shrink-0 mx-8 flex items-center justify-center"
+            >
+              <div className="w-32 h-14 flex items-center justify-center bg-white rounded-lg px-4 border border-[#e5e5e5]">
+                <span className="text-[#373a36]/60 font-bold text-sm tracking-wider uppercase whitespace-nowrap">
+                  {brand.name}
+                </span>
+              </div>
+            </div>
           ))}
           {/* Duplicate for seamless loop */}
           {brands.map((brand, index) => (
-            <BrandTile key={`brand-2-${index}`} brand={brand} />
+            <div
+              key={`brand-2-${index}`}
+              className="flex-shrink-0 mx-8 flex items-center justify-center"
+            >
+              <div className="w-32 h-14 flex items-center justify-center bg-white rounded-lg px-4 border border-[#e5e5e5]">
+                <span className="text-[#373a36]/60 font-bold text-sm tracking-wider uppercase whitespace-nowrap">
+                  {brand.name}
+                </span>
+              </div>
+            </div>
           ))}
         </div>
       </div>
