@@ -5,7 +5,7 @@ import type { Product } from "@/lib/products"
 
 interface ProductCardProps {
   product: Product
-  onClick: () => void
+  onClick?: () => void
 }
 
 export function ProductCard({ product, onClick }: ProductCardProps) {
