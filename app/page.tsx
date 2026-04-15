@@ -40,8 +40,6 @@ export default function HomePage() {
 
       {/* Hero Section with Logo + Slideshow */}
       <section className="relative bg-[#0d0d0d] overflow-hidden">
-        {/* Large red accent stripe */}
-        <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-[#ef473f]" aria-hidden="true" />
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 items-center">
             {/* Text + Logo Side */}
