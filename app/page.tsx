@@ -25,7 +25,7 @@ export default function HomePage() {
               {HOME_CONTENT.hero.body.map((paragraph, i) => (
                 <p
                   key={i}
-                  className="text-base lg:text-lg text-[#aaa] leading-relaxed font-visby mb-6 last:mb-10 max-w-lg"
+                  className="text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight tracking-wider font-visby mb-6 last:mb-10 max-w-lg"
                 >
                   {paragraph}
                 </p>
