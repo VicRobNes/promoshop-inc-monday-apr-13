@@ -8,13 +8,6 @@ import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { BRANDS } from "@/lib/brands"
 
-// Brand logo images (GitHub user-attachment URLs). Keyed by brand slug.
-const brandLogoMap: Record<string, string> = {
-  patagonia: "https://github.com/user-attachments/assets/98c33413-cf96-4f6a-89f8-889ccf990da0",
-  "peter-millar": "https://github.com/user-attachments/assets/3bbc81b7-ebe0-40d2-9762-51e04cfd44a5",
-  "helly-hansen": "https://github.com/user-attachments/assets/713359e8-7b1b-467a-b457-4b5ccd98ce3e",
-}
-
 export default function BrandsPage() {
   const [searchTerm, setSearchTerm] = useState("")
   
@@ -77,18 +70,16 @@ export default function BrandsPage() {
             <h2 className="font-montserrat font-bold text-lg uppercase tracking-wider text-[#999] mb-8">Featured Brands</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {featuredBrands.map((brand) => {
-                const logoEntry = brandLogoMap[brand.slug]
-                return (
+              {featuredBrands.map((brand) => (
                   <Link
                     key={brand.id}
                     href={`/brands/${brand.slug}`}
                     className="group bg-white border border-[#e5e5e5] rounded-lg p-8 hover:border-[#ef473f] hover:shadow-md transition-all duration-300"
                   >
                     <div className="w-full h-20 bg-[#f5f5f5] rounded flex items-center justify-center mb-6 group-hover:bg-[#fef2f2] transition-colors overflow-hidden px-4">
-                      {logoEntry ? (
+                      {brand.logoUrl ? (
                         <Image
-                          src={logoEntry}
+                          src={brand.logoUrl}
                           alt={`${brand.name} logo`}
                           width={160}
                           height={64}
@@ -119,8 +110,7 @@ export default function BrandsPage() {
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </div>
                   </Link>
-                )
-              })}
+                ))}
             </div>
           </div>
         </section>

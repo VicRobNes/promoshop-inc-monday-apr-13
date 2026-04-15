@@ -159,7 +159,7 @@ export default function SignInPage() {
             Premium Branded Merchandise
           </h2>
           <p className="text-[#888] leading-relaxed font-visby">
-            Access your account to manage quotes, save your favourite products,
+            Access your account to manage quotes, save your favorite products,
             and auto-fill your information for faster ordering.
           </p>
         </div>

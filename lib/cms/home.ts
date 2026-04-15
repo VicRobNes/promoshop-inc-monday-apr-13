@@ -1,3 +1,5 @@
+import { BRANDS } from "@/lib/brands"
+
 export interface HomeSlide {
   src: string
   alt: string
@@ -35,32 +37,9 @@ export const HOME_CONTENT = {
     { src: `${MAINMEMORY_RAW}/3.png`, alt: "PromoShop slideshow image 3" },
     { src: `${MAINMEMORY_RAW}/4.png`, alt: "PromoShop slideshow image 4" },
   ] as HomeSlide[],
-  // Brand logos — GitHub user-attachment URLs for brands where images have
-  // been uploaded. Remaining brands fall back to text tiles in the scroll reel.
-  brandLogos: [
-    {
-      name: "Patagonia",
-      logo: "https://github.com/user-attachments/assets/98c33413-cf96-4f6a-89f8-889ccf990da0",
-    },
-    { name: "YETI", logo: "" },
-    { name: "Stanley", logo: "" },
-    { name: "JBL", logo: "" },
-    { name: "Rhone", logo: "" },
-    { name: "VSSL", logo: "" },
-    {
-      name: "Peter Millar",
-      logo: "https://github.com/user-attachments/assets/3bbc81b7-ebe0-40d2-9762-51e04cfd44a5",
-    },
-    { name: "Johnnie-O", logo: "" },
-    {
-      name: "Helly Hansen",
-      logo: "https://github.com/user-attachments/assets/713359e8-7b1b-467a-b457-4b5ccd98ce3e",
-    },
-    { name: "Marine Layer", logo: "" },
-    { name: "Tentree", logo: "" },
-    { name: "Cotopaxi", logo: "" },
-    { name: "Herschel", logo: "" },
-    { name: "The North Face", logo: "" },
-    { name: "Nike", logo: "" },
-  ] as BrandLogoEntry[],
+  // Brand logos for the scrolling reel — sourced from BRANDS (single source
+  // of truth). Add/update logoUrl in lib/brands.ts to change reel images.
+  get brandLogos(): BrandLogoEntry[] {
+    return BRANDS.map((b) => ({ name: b.name, logo: b.logoUrl ?? "" }))
+  },
 }

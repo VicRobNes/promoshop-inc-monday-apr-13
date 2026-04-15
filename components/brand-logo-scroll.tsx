@@ -11,18 +11,18 @@ export function BrandLogoScroll() {
       key={tileKey}
       className="flex-shrink-0 mx-6 flex items-center justify-center"
     >
-      <div className="w-36 h-16 flex items-center justify-center bg-white rounded-lg px-3 border border-[#333] shadow-sm">
+      <div className="w-36 h-16 flex items-center justify-center bg-[#1a1a1a] rounded-lg px-3 border border-[#333] shadow-sm">
         {brand.logo ? (
           <Image
             src={brand.logo}
             alt={brand.name}
             width={120}
             height={48}
-            className="max-h-10 w-auto object-contain"
+            className="max-h-10 w-auto object-contain brightness-0 invert"
             unoptimized
           />
         ) : (
-          <span className="text-[#373a36]/60 font-bold text-xs tracking-wider uppercase whitespace-nowrap">
+          <span className="text-white/60 font-bold text-xs tracking-wider uppercase whitespace-nowrap">
             {brand.name}
           </span>
         )}

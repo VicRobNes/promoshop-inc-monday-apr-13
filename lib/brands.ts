@@ -5,6 +5,8 @@ export interface Brand {
   description: string
   categories: string[]
   featured?: boolean
+  /** GitHub user-attachment URL for the brand logo image. Empty string = text fallback. */
+  logoUrl?: string
 }
 
 export const BRANDS: Brand[] = [
@@ -14,7 +16,8 @@ export const BRANDS: Brand[] = [
     slug: "patagonia",
     description: "Outdoor apparel and gear built for adventure. Known for quality, durability, and environmental responsibility.",
     categories: ["Jackets", "Tops", "Vests", "Bags"],
-    featured: true
+    featured: true,
+    logoUrl: "https://github.com/user-attachments/assets/98c33413-cf96-4f6a-89f8-889ccf990da0",
   },
   {
     id: "yeti",
@@ -22,7 +25,8 @@ export const BRANDS: Brand[] = [
     slug: "yeti",
     description: "Premium coolers, drinkware, and gear designed for the wild. Built to withstand the elements.",
     categories: ["Drinkware", "Coolers", "Bags"],
-    featured: true
+    featured: true,
+    logoUrl: "",
   },
   {
     id: "stanley",
@@ -30,7 +34,8 @@ export const BRANDS: Brand[] = [
     slug: "stanley",
     description: "Legendary drinkware with over 100 years of heritage. Known for rugged durability and timeless design.",
     categories: ["Drinkware"],
-    featured: true
+    featured: true,
+    logoUrl: "",
   },
   {
     id: "jbl",
@@ -38,7 +43,8 @@ export const BRANDS: Brand[] = [
     slug: "jbl",
     description: "Premium audio equipment and speakers. Professional-grade sound for any environment.",
     categories: ["Tech", "Audio"],
-    featured: true
+    featured: true,
+    logoUrl: "",
   },
   {
     id: "rhone",
@@ -46,7 +52,8 @@ export const BRANDS: Brand[] = [
     slug: "rhone",
     description: "Performance apparel designed for the modern athlete. Premium fabrics with innovative technology.",
     categories: ["Tops", "Activewear"],
-    featured: true
+    featured: true,
+    logoUrl: "",
   },
   {
     id: "vssl",
@@ -54,7 +61,8 @@ export const BRANDS: Brand[] = [
     slug: "vssl",
     description: "Adventure-ready gear and drinkware. Designed for those who push boundaries.",
     categories: ["Drinkware", "Outdoor"],
-    featured: true
+    featured: true,
+    logoUrl: "",
   },
   {
     id: "marine-layer",
@@ -62,7 +70,8 @@ export const BRANDS: Brand[] = [
     slug: "marine-layer",
     description: "California-inspired casual wear. Exceptionally soft fabrics with laid-back style.",
     categories: ["Tops", "Casual"],
-    featured: false
+    featured: false,
+    logoUrl: "",
   },
   {
     id: "tentree",
@@ -70,7 +79,8 @@ export const BRANDS: Brand[] = [
     slug: "tentree",
     description: "Sustainable apparel with a mission. Every purchase plants 10 trees.",
     categories: ["Tops", "Sustainable"],
-    featured: false
+    featured: false,
+    logoUrl: "",
   },
   {
     id: "cotopaxi",
@@ -78,7 +88,8 @@ export const BRANDS: Brand[] = [
     slug: "cotopaxi",
     description: "Colorful outdoor gear with a conscience. Adventure-ready and responsibly made.",
     categories: ["Bags", "Jackets", "Outdoor"],
-    featured: false
+    featured: false,
+    logoUrl: "",
   },
   {
     id: "herschel",
@@ -86,7 +97,8 @@ export const BRANDS: Brand[] = [
     slug: "herschel",
     description: "Modern bags and accessories with heritage design. Perfect for work and travel.",
     categories: ["Bags", "Accessories"],
-    featured: false
+    featured: false,
+    logoUrl: "",
   },
   {
     id: "the-north-face",
@@ -94,7 +106,8 @@ export const BRANDS: Brand[] = [
     slug: "the-north-face",
     description: "Iconic outdoor brand for explorers. Technical gear for any adventure.",
     categories: ["Jackets", "Bags", "Outdoor"],
-    featured: false
+    featured: false,
+    logoUrl: "",
   },
   {
     id: "nike",
@@ -102,7 +115,8 @@ export const BRANDS: Brand[] = [
     slug: "nike",
     description: "World-renowned athletic wear. Innovation and performance in every product.",
     categories: ["Tops", "Activewear", "Accessories"],
-    featured: false
+    featured: false,
+    logoUrl: "",
   },
   {
     id: "peter-millar",
@@ -110,7 +124,8 @@ export const BRANDS: Brand[] = [
     slug: "peter-millar",
     description: "Luxury golf and lifestyle apparel. Refined performance wear with timeless elegance and exceptional quality.",
     categories: ["Tops", "Polos", "Golf"],
-    featured: true
+    featured: true,
+    logoUrl: "https://github.com/user-attachments/assets/3bbc81b7-ebe0-40d2-9762-51e04cfd44a5",
   },
   {
     id: "johnnie-o",
@@ -118,7 +133,8 @@ export const BRANDS: Brand[] = [
     slug: "johnnie-o",
     description: "West Coast lifestyle brand blending California cool with East Coast prep. Comfortable, versatile performance wear.",
     categories: ["Tops", "Casual", "Golf"],
-    featured: true
+    featured: true,
+    logoUrl: "",
   },
   {
     id: "helly-hansen",
@@ -126,8 +142,9 @@ export const BRANDS: Brand[] = [
     slug: "helly-hansen",
     description: "Norwegian heritage brand for sailing and outdoor adventures. Professional-grade protection with clean marine design.",
     categories: ["Jackets", "Outerwear", "Marine"],
-    featured: true
-  }
+    featured: true,
+    logoUrl: "https://github.com/user-attachments/assets/713359e8-7b1b-467a-b457-4b5ccd98ce3e",
+  },
 ]
 
 export function getBrandBySlug(slug: string): Brand | undefined {
