@@ -28,6 +28,8 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
             sizes="(max-width: 700px) 50vw, (max-width: 1100px) 33vw, 25vw"
           />
         )}
+        {/* Extremely light overlay for a studio-clean look */}
+        <div className="absolute inset-0 bg-white/[0.04] pointer-events-none" />
       </div>
 
       {/* Color Swatches */}

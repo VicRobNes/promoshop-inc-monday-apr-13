@@ -21,13 +21,13 @@ export function ContactSection() {
   }
 
   return (
-    <section className="py-16 lg:py-20 px-6 lg:px-8 bg-[#f9f9f9]" id="contact">
+    <section className="py-16 lg:py-20 px-6 lg:px-8 bg-[#111111]" id="contact">
       <div className="mx-auto max-w-7xl">
         <div className="text-center mb-12">
-          <h2 className="font-montserrat font-bold text-2xl lg:text-3xl text-[#1a1a1a] mb-3">
+          <h2 className="font-montserrat font-bold text-2xl lg:text-3xl text-white mb-3">
             Contact Us
           </h2>
-          <p className="text-[#666] max-w-xl mx-auto font-visby leading-relaxed">
+          <p className="text-[#888] max-w-xl mx-auto font-visby leading-relaxed">
             Have questions? Need a custom quote? Our team is here to help bring your vision to life.
           </p>
         </div>
@@ -36,15 +36,15 @@ export function ContactSection() {
           {/* Contact Info (locale-aware) */}
           <div className="space-y-8">
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-full bg-[#ef473f]/10 flex items-center justify-center flex-shrink-0">
+              <div className="w-12 h-12 rounded-full bg-[#ef473f]/20 flex items-center justify-center flex-shrink-0">
                 <Phone className="w-5 h-5 text-[#ef473f]" />
               </div>
               <div>
-                <h3 className="font-montserrat font-bold text-base text-[#1a1a1a] mb-2">Phone</h3>
-                <div className="space-y-1 text-[#666] font-visby">
+                <h3 className="font-montserrat font-bold text-base text-white mb-2">Phone</h3>
+                <div className="space-y-1 text-[#888] font-visby">
                   {config.allContacts.map((contact) => (
                     <p key={contact.phoneHref}>
-                      <span className="text-[#999] text-sm">{contact.phoneLabel}: </span>
+                      <span className="text-[#666] text-sm">{contact.phoneLabel}: </span>
                       <a href={contact.phoneHref} className="hover:text-[#ef473f] transition-colors">{contact.phone}</a>
                     </p>
                   ))}
@@ -53,14 +53,14 @@ export function ContactSection() {
             </div>
 
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-full bg-[#ef473f]/10 flex items-center justify-center flex-shrink-0">
+              <div className="w-12 h-12 rounded-full bg-[#ef473f]/20 flex items-center justify-center flex-shrink-0">
                 <Mail className="w-5 h-5 text-[#ef473f]" />
               </div>
               <div>
-                <h3 className="font-montserrat font-bold text-base text-[#1a1a1a] mb-2">Email</h3>
+                <h3 className="font-montserrat font-bold text-base text-white mb-2">Email</h3>
                 <a 
                   href="mailto:info@promoshopinc.com" 
-                  className="text-[#666] hover:text-[#ef473f] transition-colors font-visby"
+                  className="text-[#888] hover:text-[#ef473f] transition-colors font-visby"
                 >
                   info@promoshopinc.com
                 </a>
@@ -68,12 +68,12 @@ export function ContactSection() {
             </div>
 
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-full bg-[#ef473f]/10 flex items-center justify-center flex-shrink-0">
+              <div className="w-12 h-12 rounded-full bg-[#ef473f]/20 flex items-center justify-center flex-shrink-0">
                 <MapPin className="w-5 h-5 text-[#ef473f]" />
               </div>
               <div>
-                <h3 className="font-montserrat font-bold text-base text-[#1a1a1a] mb-2">Locations</h3>
-                <div className="text-[#666] space-y-1 font-visby">
+                <h3 className="font-montserrat font-bold text-base text-white mb-2">Locations</h3>
+                <div className="text-[#888] space-y-1 font-visby">
                   {config.allContacts.map((contact) => (
                     <p key={contact.phoneHref}>{contact.city}, {contact.region}</p>
                   ))}
@@ -83,7 +83,7 @@ export function ContactSection() {
           </div>
 
           {/* Contact Form */}
-          <div className="bg-white border border-[#e5e5e5] rounded-lg p-8 shadow-sm">
+          <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-8 shadow-sm">
             {submitted ? (
               <div className="h-full flex items-center justify-center text-center">
                 <div>
@@ -92,15 +92,15 @@ export function ContactSection() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
-                  <h3 className="font-montserrat font-bold text-xl text-[#1a1a1a] mb-2">Message Sent!</h3>
-                  <p className="text-[#666] font-visby">We&apos;ll get back to you shortly.</p>
+                  <h3 className="font-montserrat font-bold text-xl text-white mb-2">Message Sent!</h3>
+                  <p className="text-[#888] font-visby">We&apos;ll get back to you shortly.</p>
                 </div>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="name" className="block text-xs font-bold tracking-wider text-[#999] uppercase mb-2">
+                    <label htmlFor="name" className="block text-xs font-bold tracking-wider text-[#888] uppercase mb-2">
                       Name *
                     </label>
                     <input
@@ -109,12 +109,12 @@ export function ContactSection() {
                       required
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full bg-[#f9f9f9] border border-[#e5e5e5] text-[#1a1a1a] px-4 py-3 rounded text-sm font-visby focus:border-[#ef473f] focus:outline-none transition-colors"
+                      className="w-full bg-[#111] border border-[#333] text-white px-4 py-3 rounded text-sm font-visby focus:border-[#ef473f] focus:outline-none transition-colors placeholder:text-[#555]"
                       placeholder="Your name"
                     />
                   </div>
                   <div>
-                    <label htmlFor="contact-email" className="block text-xs font-bold tracking-wider text-[#999] uppercase mb-2">
+                    <label htmlFor="contact-email" className="block text-xs font-bold tracking-wider text-[#888] uppercase mb-2">
                       Email *
                     </label>
                     <input
@@ -123,13 +123,13 @@ export function ContactSection() {
                       required
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full bg-[#f9f9f9] border border-[#e5e5e5] text-[#1a1a1a] px-4 py-3 rounded text-sm font-visby focus:border-[#ef473f] focus:outline-none transition-colors"
+                      className="w-full bg-[#111] border border-[#333] text-white px-4 py-3 rounded text-sm font-visby focus:border-[#ef473f] focus:outline-none transition-colors placeholder:text-[#555]"
                       placeholder="you@company.com"
                     />
                   </div>
                 </div>
                 <div>
-                  <label htmlFor="company" className="block text-xs font-bold tracking-wider text-[#999] uppercase mb-2">
+                  <label htmlFor="company" className="block text-xs font-bold tracking-wider text-[#888] uppercase mb-2">
                     Company
                   </label>
                   <input
@@ -137,12 +137,12 @@ export function ContactSection() {
                     id="company"
                     value={formData.company}
                     onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                    className="w-full bg-[#f9f9f9] border border-[#e5e5e5] text-[#1a1a1a] px-4 py-3 rounded text-sm font-visby focus:border-[#ef473f] focus:outline-none transition-colors"
+                    className="w-full bg-[#111] border border-[#333] text-white px-4 py-3 rounded text-sm font-visby focus:border-[#ef473f] focus:outline-none transition-colors placeholder:text-[#555]"
                     placeholder="Your company name"
                   />
                 </div>
                 <div>
-                  <label htmlFor="message" className="block text-xs font-bold tracking-wider text-[#999] uppercase mb-2">
+                  <label htmlFor="message" className="block text-xs font-bold tracking-wider text-[#888] uppercase mb-2">
                     Message *
                   </label>
                   <textarea
@@ -151,7 +151,7 @@ export function ContactSection() {
                     rows={4}
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="w-full bg-[#f9f9f9] border border-[#e5e5e5] text-[#1a1a1a] px-4 py-3 rounded text-sm font-visby focus:border-[#ef473f] focus:outline-none transition-colors resize-none"
+                    className="w-full bg-[#111] border border-[#333] text-white px-4 py-3 rounded text-sm font-visby focus:border-[#ef473f] focus:outline-none transition-colors resize-none placeholder:text-[#555]"
                     placeholder="Tell us about your project..."
                   />
                 </div>

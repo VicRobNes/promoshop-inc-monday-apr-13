@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { ArrowRight, Search } from "lucide-react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
@@ -70,68 +71,46 @@ export default function BrandsPage() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {featuredBrands.map((brand) => (
-                <Link
-                  key={brand.id}
-                  href={`/brands/${brand.slug}`}
-                  className="group bg-white border border-[#e5e5e5] rounded-lg p-8 hover:border-[#ef473f] hover:shadow-md transition-all duration-300"
-                >
-                  <div className="w-full h-16 bg-[#f5f5f5] rounded flex items-center justify-center mb-6 group-hover:bg-[#fef2f2] transition-colors">
-                    <span className="font-montserrat font-bold text-xl tracking-wider text-[#373a36]/60 group-hover:text-[#ef473f] transition-colors uppercase">
+                  <Link
+                    key={brand.id}
+                    href={`/brands/${brand.slug}`}
+                    className="group bg-white border border-[#e5e5e5] rounded-lg p-8 hover:border-[#ef473f] hover:shadow-md transition-all duration-300"
+                  >
+                    <div className="w-full h-20 bg-[#f5f5f5] rounded flex items-center justify-center mb-6 group-hover:bg-[#fef2f2] transition-colors overflow-hidden px-4">
+                      {brand.logoUrl ? (
+                        <Image
+                          src={brand.logoUrl}
+                          alt={`${brand.name} logo`}
+                          width={160}
+                          height={64}
+                          className="max-h-14 w-auto object-contain"
+                          unoptimized
+                        />
+                      ) : (
+                        <span className="font-montserrat font-bold text-xl tracking-wider text-[#373a36]/60 group-hover:text-[#ef473f] transition-colors uppercase">
+                          {brand.name}
+                        </span>
+                      )}
+                    </div>
+
+                    <h3 className="font-montserrat font-bold text-lg text-[#1a1a1a] mb-2 group-hover:text-[#ef473f] transition-colors">
                       {brand.name}
-                    </span>
-                  </div>
+                    </h3>
+                    
+                    <p className="text-xs font-bold tracking-wider uppercase text-[#ef473f] mb-2">
+                      {brand.categories[0]}
+                    </p>
+                    
+                    <p className="text-sm text-[#666] leading-relaxed mb-4 font-visby">
+                      {brand.description}
+                    </p>
 
-                  <h3 className="font-montserrat font-bold text-lg text-[#1a1a1a] mb-2 group-hover:text-[#ef473f] transition-colors">
-                    {brand.name}
-                  </h3>
-                  
-                  <p className="text-xs font-bold tracking-wider uppercase text-[#ef473f] mb-2">
-                    {brand.categories[0]}
-                  </p>
-                  
-                  <p className="text-sm text-[#666] leading-relaxed mb-4 font-visby">
-                    {brand.description}
-                  </p>
-
-                  <div className="flex items-center gap-2 text-[#ef473f] text-sm font-semibold uppercase tracking-wider">
-                    View Products
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* All Other Brands */}
-      {otherBrands.length > 0 && (
-        <section className="py-12 px-6 lg:px-8 bg-[#f9f9f9]">
-          <div className="mx-auto max-w-7xl">
-            <h2 className="font-montserrat font-bold text-lg uppercase tracking-wider text-[#999] mb-8">More Brands</h2>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {otherBrands.map((brand) => (
-                <Link
-                  key={brand.id}
-                  href={`/brands/${brand.slug}`}
-                  className="group bg-white border border-[#e5e5e5] rounded-lg p-6 hover:border-[#ef473f] hover:shadow-sm transition-all duration-300"
-                >
-                  <div className="w-full h-12 flex items-center justify-center mb-3">
-                    <span className="font-montserrat font-bold text-base tracking-wider text-[#373a36]/60 group-hover:text-[#ef473f] transition-colors uppercase">
-                      {brand.name}
-                    </span>
-                  </div>
-                  
-                  <p className="text-[10px] font-bold tracking-wider uppercase text-[#ef473f] text-center mb-2">
-                    {brand.categories[0]}
-                  </p>
-                  
-                  <p className="text-xs text-[#999] text-center leading-relaxed font-visby line-clamp-2">
-                    {brand.description}
-                  </p>
-                </Link>
-              ))}
+                    <div className="flex items-center gap-2 text-[#ef473f] text-sm font-semibold uppercase tracking-wider">
+                      View Products
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </Link>
+                ))}
             </div>
           </div>
         </section>

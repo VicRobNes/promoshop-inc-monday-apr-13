@@ -27,6 +27,18 @@ const nextConfig = {
         hostname: 'raw.githubusercontent.com',
         pathname: '/VicRobNes/mainmemory/**',
       },
+      {
+        // GitHub user-attachment images (brand logos, team photos uploaded
+        // via issue/PR comments or the CMS upload flow).
+        protocol: 'https',
+        hostname: 'github.com',
+        pathname: '/user-attachments/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'user-images.githubusercontent.com',
+        pathname: '/**',
+      },
     ],
   },
 }

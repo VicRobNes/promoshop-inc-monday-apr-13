@@ -40,11 +40,12 @@ export default function SignInPage() {
         <div className="w-full max-w-md">
           <Link href="/" className="inline-block mb-12">
             <Image
-              src="/images/promoshop-logo-full.png"
-              alt="PromoShop - Creative happens here"
+              src="https://raw.githubusercontent.com/VicRobNes/mainmemory/main/Promoshop%20logo%20(2).png"
+              alt="PromoShop Studio"
               width={220}
               height={72}
               className="h-14 w-auto"
+              unoptimized
             />
           </Link>
 
@@ -144,19 +145,20 @@ export default function SignInPage() {
       </div>
 
       {/* Right Panel - Branding */}
-      <div className="hidden lg:flex flex-1 bg-[#f9f9f9] border-l border-[#e5e5e5] items-center justify-center p-12">
+      <div className="hidden lg:flex flex-1 bg-[#0d0d0d] border-l border-[#2a2a2a] items-center justify-center p-12">
         <div className="max-w-md text-center">
           <Image
-            src="/images/promoshop-logo-full.png"
-            alt="PromoShop - Creative happens here"
+            src="https://raw.githubusercontent.com/VicRobNes/mainmemory/main/Promoshop%20logo%20(2).png"
+            alt="PromoShop Studio"
             width={260}
             height={86}
             className="h-20 w-auto mx-auto mb-8"
+            unoptimized
           />
-          <h2 className="font-montserrat font-bold text-2xl text-[#1a1a1a] mb-4">
+          <h2 className="font-montserrat font-bold text-2xl text-white mb-4">
             Premium Branded Merchandise
           </h2>
-          <p className="text-[#666] leading-relaxed font-visby">
+          <p className="text-[#888] leading-relaxed font-visby">
             Access your account to manage quotes, save your favorite products,
             and auto-fill your information for faster ordering.
           </p>
