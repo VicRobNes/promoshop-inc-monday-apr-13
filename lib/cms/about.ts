@@ -1,22 +1,23 @@
 // About page content. Edited via the upcoming admin dashboard.
 //
-// NOTE: the hero body text below is the interim version taken from Abigail's
-// email description. The exact "Promoshop Canada Ltd. is a Top 40..." boilerplate
-// should be pasted in verbatim once we confirm the final copy with Abigail.
-// The hero image temporarily reuses /images/about-office.jpg so the build stays
-// green; swap to /images/about-storefront.jpg once that asset is uploaded.
-// See docs/asset-map.md for outstanding items.
+// Body copy is the verbatim boilerplate Abigail pasted in her Apr 14 staging
+// review email. The hero image points at the storefront shot in the
+// VicRobNes/mainmemory repo (11.png) via raw.githubusercontent.com. The
+// domain is allow-listed in next.config.mjs so next/image can serve it.
+const MAINMEMORY_RAW = "https://raw.githubusercontent.com/VicRobNes/mainmemory/main"
+
 export const ABOUT_CONTENT = {
   hero: {
     eyebrow: "About Us",
     heading: "Meet PromoShop",
-    // TODO: replace with /images/about-storefront.jpg (storefront photo from rephotosforpromoshop.zip)
-    image: "/images/about-office.jpg",
-    imageAlt: "PromoShop storefront",
+    // Best-guess storefront image from Abigail's updated set — if she flags a
+    // different file in the Apr 15 review call, just swap the filename here.
+    image: `${MAINMEMORY_RAW}/11.png`,
+    imageAlt: "Outside of the PromoShop building",
     body: [
-      "Promoshop Canada Ltd. is a Top 40 North American distributor of branded merchandise and promotional products, recognised for delivering premium quality, creative solutions, and measurable brand impact to organisations across Canada and the United States.",
-      "Our team partners with businesses of every size \u2014 from startups to Fortune 500 companies \u2014 to curate merchandise that represents their brand with pride. With offices in Windsor, Toronto, and Detroit, we combine local service with cross-border reach.",
-      "We believe promotional products should be more than giveaways; they should be items people actually want to use. That commitment to quality is what has made us trusted partners for our clients, year after year.",
+      "Promoshop Canada Ltd. is a Top 40 Promotional Merchandise Company in North America, with corporate head offices in Windsor, Ontario and Los Angeles, California. With more than 28 years in business and over $70 million in annual revenue, Promoshop ranks in the Top 1% of promotional merchandise companies across North America.",
+      "We partner with some of the most recognizable global brands to create Memorable Merchandise Experiences. Through our extensive vendor network and access to premium retail brands, we help High-Level Organizations deliver merchandise that stands out and stands the test of time.",
+      "Whether supporting a national rollout, a luxury gifting initiative, or a curated company apparel program. Our team manages every detail from concept to completion.",
     ],
   },
 }

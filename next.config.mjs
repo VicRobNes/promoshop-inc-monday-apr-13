@@ -19,6 +19,14 @@ const nextConfig = {
         hostname: 'hebbkx1anhila5yf.public.blob.vercel-storage.com',
         pathname: '/**',
       },
+      {
+        // Raw assets committed to VicRobNes/mainmemory (Promoshop logo,
+        // slideshow photos, storefront image). Used by lib/cms/home.ts and
+        // lib/cms/about.ts until the admin dashboard uploads replace them.
+        protocol: 'https',
+        hostname: 'raw.githubusercontent.com',
+        pathname: '/VicRobNes/mainmemory/**',
+      },
     ],
   },
 }

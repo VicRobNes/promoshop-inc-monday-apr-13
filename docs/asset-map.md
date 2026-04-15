@@ -1,36 +1,39 @@
-# Asset map — claude/promoshop-staging-qa-HsyTJ
+# Asset map — claude/update-carousel-images-L7n5N
 
-This branch addresses Abigail's staging QA punch list. Several assets need real
-files committed to `public/` before the Vercel preview will render correctly.
-This doc records which code references still point at placeholders and which
-mainmemory files (branch `claude/promoshop-staging-qa-HsyTJ` of
-`VicRobNes/mainmemory`) should fill them.
+This branch stacks on top of `claude/promoshop-staging-qa-HsyTJ` (see PR #2)
+and resolves the carousel / logo / storefront / about-copy items from that
+PR's asset map.
 
 ## Code → asset status
 
-| Code reference | Status | Mainmemory source |
+| Code reference | Status | Source |
 | --- | --- | --- |
-| `/images/promoshop-studio-logo.png` (home hero + header) | **NEEDS FILE** | `Promoshop logo (2).png` |
-| `/images/about-storefront.jpg` (about hero) | **NEEDS FILE** | best exterior shot from `rephotosforpromoshop.zip` |
-| `/images/slideshow/slide-01.jpg` … `slide-03.jpg` (home slideshow) | **NEEDS FILE** | selected images from `1.png` … `11.png` — mapping TBD with Abigail |
-| `/brands/*.svg` (brand logo scroll) | **NEEDS FILES** | brand logo files in `rephotosforpromoshop.zip` |
-| `/images/hero-merchandise.jpg` | ✅ already on branch | — |
+| Home hero logo | ✅ wired to `VicRobNes/mainmemory/Promoshop logo (2).png` | Abigail's Apr 13 email thread |
+| Home slideshow (4 slides) | ✅ wired to `mainmemory/1.png`…`4.png` via raw.githubusercontent.com | Abigail's updated set |
+| About hero storefront | ✅ wired to `mainmemory/11.png` — **needs visual confirmation** | Abigail's Apr 13 email ("last image is outside of our building") |
+| About body copy | ✅ replaced with verbatim "Promoshop Canada Ltd. is a Top 40…" paragraph | Abigail's Apr 14 email |
+| `/brands/*.svg` (brand logo scroll) | ⚠️ still flagged — PNG/SVG files not yet extracted from `rephotosforpromoshop.zip` | PR #2 |
 
-## Outstanding questions for Abigail
+`next.config.mjs` was updated with a `raw.githubusercontent.com/VicRobNes/mainmemory/**`
+remote pattern so `next/image` can render the slideshow, logo, and storefront
+without having to commit binaries into `public/` on this repo.
 
-1. **Slideshow mapping** — which of `1.png`…`11.png` (or which files inside
-   `rephotosforpromoshop.zip`) are the hero slideshow images? I currently
-   reference `slide-01.jpg`…`slide-03.jpg` as placeholders.
-2. **About hero** — is there a preferred storefront photo? I'll use the first
-   clearly-exterior shot from the zip unless you flag a specific file.
-3. **Brand logos** — do you have SVG versions? PNG fallbacks are fine; the
-   brand-logo-scroll component accepts either.
-4. **About body copy** — the "Promoshop Canada Ltd. is a Top 40…" paragraph in
-   `lib/cms/about.ts` is my best interpretation from the email summary. Please
-   paste the exact boilerplate so I can replace it verbatim.
+## Outstanding questions for the Apr 15 12:30 PM review call
 
-## How to add assets
+1. **Slideshow ordering.** I mapped `mainmemory/1.png`…`4.png` to slides 1–4
+   in the order they appear in the mainmemory listing. If Abigail meant a
+   different subset (e.g. the most-recently-added files), re-order `slideshow`
+   in `lib/cms/home.ts`.
+2. **Storefront photo.** I picked `mainmemory/11.png` as the most likely
+   "outside the building" shot from the 1.png…11.png set. If a different file
+   is the correct storefront, update `hero.image` in `lib/cms/about.ts`.
+3. **Brand scroll logos.** Still outstanding — PNG/SVG assets need to be
+   extracted from `rephotosforpromoshop.zip` (or shipped from the design team)
+   and dropped into `public/brands/`. The scroll already renders a text
+   fallback if the files are missing, so the preview is safe in the meantime.
 
-Drop binaries directly into `public/` (or the appropriate subfolder) on this
-branch. The Next.js `<Image>` components on Home, About, and Brand Scroll will
-pick them up automatically via the paths listed above.
+## How to swap an image
+
+All three paths live in `lib/cms/*.ts` and are a single string edit each.
+Once the admin dashboard ships, these become rows in the CMS that Abigail
+can edit without a code change.
