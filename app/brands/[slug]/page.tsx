@@ -32,7 +32,7 @@ export default async function BrandPage({ params }: BrandPageProps) {
 
   return (
     <div className="min-h-screen bg-[#ededed] text-[#111] font-montserrat">
-      <Header variant="light" />
+      <Header />
 
       {/* Breadcrumb & Hero */}
       <section className="px-6 lg:px-10 pt-8 pb-12">
@@ -98,7 +98,6 @@ export default async function BrandPage({ params }: BrandPageProps) {
                 >
                   <ProductCard
                     product={product}
-                    onClick={() => {}}
                   />
                 </Link>
               ))}
@@ -146,7 +145,7 @@ export default async function BrandPage({ params }: BrandPageProps) {
         </div>
       </section>
 
-      <Footer variant="light" />
+      <Footer />
     </div>
   )
 }
