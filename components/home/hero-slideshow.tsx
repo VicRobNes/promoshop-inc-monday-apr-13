@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import Image from "next/image"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import type { HomeSlide } from "@/lib/cms/home"
 
@@ -41,16 +40,7 @@ export function HeroSlideshow({ slides, intervalMs = 5000 }: HeroSlideshowProps)
             i === index ? "opacity-100" : "opacity-0 pointer-events-none"
           }`}
           aria-hidden={i !== index}
-        >
-          <Image
-            src={slide.src}
-            alt={slide.alt}
-            fill
-            className="object-cover"
-            priority={i === 0}
-            sizes="(max-width: 1024px) 100vw, 50vw"
-          />
-        </div>
+        ></div>
       ))}
 
       {slides.length > 1 && (
