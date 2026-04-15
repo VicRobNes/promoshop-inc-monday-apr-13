@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Montserrat, Bebas_Neue, DM_Sans } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { QuoteProvider } from '@/lib/quote-context'
+import { LocaleProvider } from '@/lib/locale-context'
 import './globals.css'
 
 const montserrat = Montserrat({ 
@@ -53,9 +54,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`bg-background ${montserrat.variable} ${bebasNeue.variable} ${dmSans.variable}`}>
       <body className="font-sans antialiased bg-background text-foreground">
-        <QuoteProvider>
-          {children}
-        </QuoteProvider>
+        <LocaleProvider>
+          <QuoteProvider>
+            {children}
+          </QuoteProvider>
+        </LocaleProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
