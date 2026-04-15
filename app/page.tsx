@@ -25,7 +25,11 @@ export default function HomePage() {
               {HOME_CONTENT.hero.body.map((paragraph, i) => (
                 <p
                   key={i}
-                  className="text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight tracking-wider font-visby mb-6 last:mb-10 max-w-lg"
+                  className="text-5xl lg:text-6xl xl:text-7xl font-black text-[#e7e7e7] mb-6 last:mb-10 max-w-lg font-visby"
+                  style={{
+                    lineHeight: "0.9em",
+                    letterSpacing: "0.126em",
+                  }}
                 >
                   {paragraph}
                 </p>
