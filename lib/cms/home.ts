@@ -24,8 +24,7 @@ export const HOME_CONTENT = {
     logo: `${MAINMEMORY_LOCAL}/promoshop-logo.png`,
     logoAlt: "PromoShop Studio",
     body: [
-      "Welcome to our store, where promoting your business is our business. Born from an expertise in building brands, we offer unique, quality promotional products, excellent service, and customer-focused marketing.",
-      "From our office, we are your premier source for branding solutions! We present our Signature Collection, carefully selected promotional items that we refresh daily with the newest, hottest, and trendiest products.",
+      "PREMIUM MERCH FOR PREMIUM BRANDS",
     ],
   },
   // The four home-page slideshow images Abigail re-sent on Apr 13. Ordering

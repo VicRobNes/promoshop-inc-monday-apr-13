@@ -9,35 +9,10 @@ import { HeroSlideshow } from "@/components/home/hero-slideshow"
 import { HOME_CONTENT } from "@/lib/cms/home"
 import { TEAM_MEMBERS } from "@/lib/cms/team"
 
-const collections = [
-  { name: "No Holds Promo", href: "/studio" },
-  { name: "2025 New Products", href: "/studio" },
-  { name: "Get Outdoors", href: "/studio" },
-  { name: "Distinctive Drinkware", href: "/studio" },
-  { name: "Golf", href: "/studio" },
-  { name: "Eco-Aware", href: "/studio" },
-  { name: "Self-Care", href: "/studio" },
-]
-
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-[#111111] text-white">
       <Header />
-
-      {/* Collection Navigation Bar */}
-      <section className="border-b border-[#2a2a2a] overflow-x-auto bg-[#0d0d0d]">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8 flex items-center gap-6 py-3">
-          {collections.map((col) => (
-            <Link
-              key={col.name}
-              href={col.href}
-              className="text-xs font-bold text-[#888] hover:text-[#ef473f] transition-colors whitespace-nowrap uppercase tracking-wider"
-            >
-              {col.name}
-            </Link>
-          ))}
-        </div>
-      </section>
 
       {/* Hero Section with Logo + Slideshow */}
       <section className="relative bg-[#0d0d0d] overflow-hidden">
@@ -47,18 +22,14 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 items-center">
             {/* Text + Logo Side */}
             <div className="py-16 lg:py-24 lg:pr-12">
-              <Image
-                src={HOME_CONTENT.hero.logo}
-                alt={HOME_CONTENT.hero.logoAlt}
-                width={340}
-                height={110}
-                className="h-20 lg:h-24 w-auto mb-8"
-                priority
-              />
               {HOME_CONTENT.hero.body.map((paragraph, i) => (
                 <p
                   key={i}
-                  className="text-base lg:text-lg text-[#aaa] leading-relaxed font-visby mb-6 last:mb-10 max-w-lg"
+                  className="text-5xl lg:text-6xl xl:text-7xl font-black text-[#e7e7e7] mb-6 last:mb-10 max-w-lg"
+                  style={{
+                    lineHeight: "0.9em",
+                    letterSpacing: "0.126em",
+                  }}
                 >
                   {paragraph}
                 </p>
