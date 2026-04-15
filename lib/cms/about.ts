@@ -1,10 +1,10 @@
 // About page content. Edited via the upcoming admin dashboard.
 //
 // Body copy is the verbatim boilerplate Abigail pasted in her Apr 14 staging
-// review email. The hero image points at the storefront shot in the
-// VicRobNes/mainmemory repo (11.png) via raw.githubusercontent.com. The
-// domain is allow-listed in next.config.mjs so next/image can serve it.
-const MAINMEMORY_RAW = "https://raw.githubusercontent.com/VicRobNes/mainmemory/main"
+// review email. The hero image is now served from this repo's public/ folder
+// — the previous raw.githubusercontent.com URLs were 404ing because
+// VicRobNes/mainmemory is a private repo.
+const MAINMEMORY_LOCAL = "/images/mainmemory"
 
 export const ABOUT_CONTENT = {
   hero: {
@@ -12,7 +12,7 @@ export const ABOUT_CONTENT = {
     heading: "MEET PROMOSHOP",
     // Best-guess storefront image from Abigail's updated set — if she flags a
     // different file in the Apr 15 review call, just swap the filename here.
-    image: `${MAINMEMORY_RAW}/11.png`,
+    image: `${MAINMEMORY_LOCAL}/11.png`,
     imageAlt: "Outside of the PromoShop building",
     body: [
       "Promoshop Canada Ltd. is a Top 40 Promotional Merchandise Company in North America, with corporate head offices in Windsor, Ontario and Los Angeles, California. With more than 28 years in business and over $70 million in annual revenue, Promoshop ranks in the Top 1% of promotional merchandise companies across North America.",
