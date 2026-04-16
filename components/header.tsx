@@ -1,12 +1,12 @@
 "use client"
 
 import Link from "next/link"
-import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { useState, useEffect } from "react"
-import { Menu, X, ShoppingBag, Phone, Heart, User } from "lucide-react"
+import { Menu, X, ShoppingBag, Phone, Heart, User, Settings } from "lucide-react"
 import { useLocale } from "@/lib/locale-context"
 import { HOME_CONTENT } from "@/lib/cms/home"
+import { SiteImage } from "@/components/site-image"
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -73,6 +73,10 @@ export function Header() {
               <User className="w-3 h-3" />
               Login / Register
             </Link>
+            <Link href="/admin" className="flex items-center gap-1.5 text-xs font-visby hover:text-[#ef473f] transition-colors">
+              <Settings className="w-3 h-3" />
+              Admin
+            </Link>
             <Link href="/my-quote" className="flex items-center gap-1.5 text-xs font-visby hover:text-[#ef473f] transition-colors">
               <Heart className="w-3 h-3" />
               Wishlist
@@ -85,8 +89,9 @@ export function Header() {
       <nav className="mx-auto max-w-7xl flex items-center justify-between px-6 py-3 lg:py-4 lg:px-8 border-b border-[#e5e5e5]">
         {/* Logo — the newly-provided PromoShop studio mark */}
         <Link href="/" className="flex-shrink-0">
-          <Image
-            src={HOME_CONTENT.hero.logo}
+          <SiteImage
+            imageId="site.logo"
+            defaultSrc={HOME_CONTENT.hero.logo}
             alt={HOME_CONTENT.hero.logoAlt}
             width={220}
             height={72}
@@ -187,6 +192,13 @@ export function Header() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Login / Register
+              </Link>
+              <Link
+                href="/admin"
+                className="block py-2 text-sm font-bold uppercase tracking-wider text-[#373a36] text-center"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Admin
               </Link>
             </div>
           </div>

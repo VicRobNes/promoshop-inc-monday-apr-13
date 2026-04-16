@@ -1,34 +1,41 @@
 "use client"
 
-import Image from "next/image"
-import { HOME_CONTENT } from "@/lib/cms/home"
+import { BRANDS } from "@/lib/brands"
+import { SiteImage } from "@/components/site-image"
+import { brandLogoId } from "@/lib/image-registry"
+import { useImageSrc } from "@/hooks/use-image-src"
 
 export function BrandLogoScroll() {
-  const brands = HOME_CONTENT.brandLogos
+  const brands = BRANDS
 
-  const Tile = ({ brand, tileKey }: { brand: (typeof brands)[0]; tileKey: string }) => (
-    <div
-      key={tileKey}
-      className="flex-shrink-0 mx-6 flex items-center justify-center"
-    >
-      <div className="w-36 h-16 flex items-center justify-center bg-[#1a1a1a] rounded-lg px-3 border border-[#333] shadow-sm">
-        {brand.logo ? (
-          <Image
-            src={brand.logo}
-            alt={brand.name}
-            width={120}
-            height={48}
-            className="max-h-10 w-auto object-contain brightness-0 invert"
-            unoptimized
-          />
-        ) : (
-          <span className="text-white/60 font-bold text-xs tracking-wider uppercase whitespace-nowrap">
-            {brand.name}
-          </span>
-        )}
+  const Tile = ({ brand, tileKey }: { brand: (typeof brands)[0]; tileKey: string }) => {
+    const id = brandLogoId(brand.slug)
+    const src = useImageSrc(id, brand.logoUrl ?? "")
+    return (
+      <div
+        key={tileKey}
+        className="flex-shrink-0 mx-6 flex items-center justify-center"
+      >
+        <div className="w-36 h-16 flex items-center justify-center bg-[#1a1a1a] rounded-lg px-3 border border-[#333] shadow-sm">
+          {src ? (
+            <SiteImage
+              imageId={id}
+              defaultSrc={brand.logoUrl ?? ""}
+              alt={brand.name}
+              width={120}
+              height={48}
+              className="max-h-10 w-auto object-contain brightness-0 invert"
+              unoptimized
+            />
+          ) : (
+            <span className="text-white/60 font-bold text-xs tracking-wider uppercase whitespace-nowrap">
+              {brand.name}
+            </span>
+          )}
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
 
   return (
     <section className="py-8 bg-[#0d0d0d] border-y border-[#2a2a2a] overflow-hidden">

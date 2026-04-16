@@ -3,10 +3,40 @@
 import { useEffect, useState } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import type { HomeSlide } from "@/lib/cms/home"
+import { useImageSrc } from "@/hooks/use-image-src"
 
 interface HeroSlideshowProps {
   slides: HomeSlide[]
   intervalMs?: number
+}
+
+function Slide({
+  slide,
+  active,
+  slideIndex,
+}: {
+  slide: HomeSlide
+  active: boolean
+  slideIndex: number
+}) {
+  // Only render the image when the admin has set a custom override —
+  // defaults stay blank to preserve the intentional "no background image"
+  // hero design. The Admin panel still lists these slots so they can be
+  // turned back on at any time.
+  const src = useImageSrc(`home.slideshow.${slideIndex}`, "")
+  return (
+    <div
+      className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
+        active ? "opacity-100" : "opacity-0 pointer-events-none"
+      }`}
+      aria-hidden={!active}
+    >
+      {src ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={src} alt={slide.alt} className="w-full h-full object-cover" />
+      ) : null}
+    </div>
+  )
 }
 
 export function HeroSlideshow({ slides, intervalMs = 5000 }: HeroSlideshowProps) {
@@ -34,13 +64,12 @@ export function HeroSlideshow({ slides, intervalMs = 5000 }: HeroSlideshowProps)
       onMouseLeave={() => setPaused(false)}
     >
       {slides.map((slide, i) => (
-        <div
-          key={slide.src}
-          className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
-            i === index ? "opacity-100" : "opacity-0 pointer-events-none"
-          }`}
-          aria-hidden={i !== index}
-        ></div>
+        <Slide
+          key={`${i}-${slide.src}`}
+          slide={slide}
+          active={i === index}
+          slideIndex={i + 1}
+        />
       ))}
 
       {slides.length > 1 && (

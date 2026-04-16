@@ -2,11 +2,11 @@
 
 import { useState, useMemo } from "react"
 import Link from "next/link"
-import Image from "next/image"
 import { ArrowRight, Search } from "lucide-react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { BRANDS } from "@/lib/brands"
+import { BrandLogo } from "@/components/brand-logo"
 
 export default function BrandsPage() {
   const [searchTerm, setSearchTerm] = useState("")
@@ -77,20 +77,10 @@ export default function BrandsPage() {
                     className="group bg-white border border-[#e5e5e5] rounded-lg p-8 hover:border-[#ef473f] hover:shadow-md transition-all duration-300"
                   >
                     <div className="w-full h-20 bg-[#f5f5f5] rounded flex items-center justify-center mb-6 group-hover:bg-[#fef2f2] transition-colors overflow-hidden px-4">
-                      {brand.logoUrl ? (
-                        <Image
-                          src={brand.logoUrl}
-                          alt={`${brand.name} logo`}
-                          width={160}
-                          height={64}
-                          className="max-h-14 w-auto object-contain"
-                          unoptimized
-                        />
-                      ) : (
-                        <span className="font-montserrat font-bold text-xl tracking-wider text-[#373a36]/60 group-hover:text-[#ef473f] transition-colors uppercase">
-                          {brand.name}
-                        </span>
-                      )}
+                      <BrandLogo
+                        brand={brand}
+                        fallbackClassName="font-montserrat font-bold text-xl tracking-wider text-[#373a36]/60 group-hover:text-[#ef473f] transition-colors uppercase"
+                      />
                     </div>
 
                     <h3 className="font-montserrat font-bold text-lg text-[#1a1a1a] mb-2 group-hover:text-[#ef473f] transition-colors">
