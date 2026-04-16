@@ -2,9 +2,10 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import Image from "next/image"
 import { Instagram, Linkedin, Facebook, Twitter, ArrowRight } from "lucide-react"
 import { useLocale } from "@/lib/locale-context"
+import { SiteImage } from "@/components/site-image"
+import { HOME_CONTENT } from "@/lib/cms/home"
 
 export function Footer() {
   const [email, setEmail] = useState("")
@@ -33,8 +34,9 @@ export function Footer() {
           <div className="lg:col-span-2">
             {/* PromoShop Studio logo */}
             <Link href="/" className="inline-block mb-4">
-              <Image
-                src="/images/mainmemory/promoshop-logo.png"
+              <SiteImage
+                imageId="site.logo"
+                defaultSrc={HOME_CONTENT.hero.logo}
                 alt="PromoShop Studio"
                 width={180}
                 height={60}

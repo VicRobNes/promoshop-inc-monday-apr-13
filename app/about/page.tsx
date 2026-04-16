@@ -1,9 +1,10 @@
-import Image from "next/image"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { ContactSection } from "@/components/contact-section"
 import { ABOUT_CONTENT } from "@/lib/cms/about"
 import { TEAM_MEMBERS } from "@/lib/cms/team"
+import { SiteImage } from "@/components/site-image"
+import { TeamMemberAvatar } from "@/components/team-member-avatar"
 
 export default function AboutPage() {
   return (
@@ -18,8 +19,9 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 items-center">
             {/* Image — LEFT on desktop */}
             <div className="relative h-72 lg:h-full lg:min-h-[480px] order-first lg:order-first">
-              <Image
-                src={ABOUT_CONTENT.hero.image}
+              <SiteImage
+                imageId="about.hero"
+                defaultSrc={ABOUT_CONTENT.hero.image}
                 alt={ABOUT_CONTENT.hero.imageAlt}
                 fill
                 className="object-cover"
@@ -63,19 +65,7 @@ export default function AboutPage() {
             {TEAM_MEMBERS.map((member) => (
               <div key={member.name} className="text-center group">
                 <div className="w-28 h-28 mx-auto mb-4 rounded-full bg-[#1a1a1a] flex items-center justify-center border-2 border-[#333] group-hover:border-[#ef473f] transition-colors overflow-hidden">
-                  {member.imagePath ? (
-                    <Image
-                      src={member.imagePath}
-                      alt={member.name}
-                      width={112}
-                      height={112}
-                      className="w-full h-full object-cover rounded-full"
-                    />
-                  ) : (
-                    <span className="font-montserrat font-bold text-2xl text-[#ef473f]">
-                      {member.name.split(" ").map((n) => n[0]).join("")}
-                    </span>
-                  )}
+                  <TeamMemberAvatar member={member} size={112} />
                 </div>
                 <h3 className="font-montserrat font-bold text-sm text-white">{member.name}</h3>
                 <p className="text-xs text-[#ef473f] font-bold uppercase tracking-wider mt-1">{member.role}</p>
