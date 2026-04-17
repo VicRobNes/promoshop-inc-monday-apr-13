@@ -28,7 +28,62 @@ import {
 import { useAuth } from "@/lib/auth/AuthProvider"
 import { useAdminGuard } from "@/lib/auth/useAdminGuard"
 
-const MAX_UPLOAD_BYTES = 2.5 * 1024 * 1024 // 2.5 MB — localStorage typically caps ~5MB total.
+// When Azure Blob storage is configured (Phase 3) we allow larger files
+// because they don't have to round-trip through localStorage. We still cap
+// them so admins don't accidentally upload 50 MB hero images.
+const MAX_UPLOAD_BYTES_BLOB = 10 * 1024 * 1024 // 10 MB
+const MAX_UPLOAD_BYTES_FALLBACK = 2.5 * 1024 * 1024 // 2.5 MB — localStorage typically caps ~5MB total.
+
+const UPLOAD_ENDPOINT = "/api/admin/upload"
+
+interface UploadSasResponse {
+  uploadUrl: string
+  readUrl: string
+  container: string
+  blobPath: string
+  expiresAt: number
+}
+
+async function uploadViaBlob(slotId: string, file: File): Promise<string> {
+  const sasRes = await fetch(UPLOAD_ENDPOINT, {
+    method: "POST",
+    credentials: "include",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      slotId,
+      fileName: file.name,
+      contentType: file.type || "application/octet-stream",
+    }),
+  })
+  if (sasRes.status === 503) {
+    throw new BlobNotConfiguredError()
+  }
+  if (!sasRes.ok) {
+    const msg = await sasRes.text().catch(() => "")
+    throw new Error(`Upload endpoint returned ${sasRes.status}: ${msg.slice(0, 200)}`)
+  }
+  const sas = (await sasRes.json()) as UploadSasResponse
+
+  const putRes = await fetch(sas.uploadUrl, {
+    method: "PUT",
+    headers: {
+      "x-ms-blob-type": "BlockBlob",
+      "content-type": file.type || "application/octet-stream",
+    },
+    body: file,
+  })
+  if (!putRes.ok) {
+    throw new Error(`Blob PUT failed: ${putRes.status} ${putRes.statusText}`)
+  }
+  return sas.readUrl
+}
+
+class BlobNotConfiguredError extends Error {
+  constructor() {
+    super("Blob storage not yet configured; falling back to local overrides.")
+    this.name = "BlobNotConfiguredError"
+  }
+}
 
 function groupSlots(slots: ImageSlot[]): Record<string, ImageSlot[]> {
   return slots.reduce(
@@ -286,15 +341,41 @@ function ImageRow({ slot, override }: ImageRowProps) {
     }
   }
 
-  const handleFile = (file: File) => {
+  const handleFile = async (file: File) => {
     setError(null)
-    if (file.size > MAX_UPLOAD_BYTES) {
+    setUploadBusy(true)
+
+    // Try blob upload first; on 503 (not configured) fall back to base64.
+    try {
+      if (file.size > MAX_UPLOAD_BYTES_BLOB) {
+        throw new Error(
+          `That file is ${(file.size / 1024 / 1024).toFixed(1)} MB. Please upload an image under 10 MB.`,
+        )
+      }
+      const readUrl = await uploadViaBlob(slot.id, file)
+      setOverride(slot.id, readUrl)
+      setDraftUrl(readUrl)
+      setUploadBusy(false)
+      return
+    } catch (err) {
+      if (!(err instanceof BlobNotConfiguredError)) {
+        setUploadBusy(false)
+        setError(
+          err instanceof Error ? err.message : "Couldn't upload to blob storage.",
+        )
+        return
+      }
+      // fall through to base64 path
+    }
+
+    // Fallback: base64 data URL in override (original behaviour pre-Phase 3).
+    if (file.size > MAX_UPLOAD_BYTES_FALLBACK) {
+      setUploadBusy(false)
       setError(
-        `That file is ${(file.size / 1024 / 1024).toFixed(1)} MB. Please upload an image under 2.5 MB, or paste a URL instead.`,
+        `Blob storage isn't configured yet and this file is ${(file.size / 1024 / 1024).toFixed(1)} MB — please use an image under 2.5 MB or paste a URL until Phase 0 provisioning completes.`,
       )
       return
     }
-    setUploadBusy(true)
     const reader = new FileReader()
     reader.onerror = () => {
       setUploadBusy(false)
