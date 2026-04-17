@@ -1,13 +1,24 @@
 "use client"
 
-import { useState } from "react"
+import { Suspense, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Eye, EyeOff, ArrowRight, Check } from "lucide-react"
+import { setFallbackUser, useAuth } from "@/lib/auth/AuthProvider"
 
 export default function SignUpPage() {
+  return (
+    <Suspense fallback={null}>
+      <SignUpPageInner />
+    </Suspense>
+  )
+}
+
+function SignUpPageInner() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const { signIn, mode } = useAuth()
   const [formData, setFormData] = useState({
     firstName: "", lastName: "", email: "", company: "", phone: "", password: "", confirmPassword: "",
   })
@@ -16,6 +27,8 @@ export default function SignUpPage() {
   const [error, setError] = useState("")
   const [agreedToTerms, setAgreedToTerms] = useState(false)
 
+  const redirectTarget = searchParams?.get("redirect") ?? "/my-quote"
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))
   }
@@ -23,14 +36,36 @@ export default function SignUpPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
+
+    if (mode === "msal") {
+      // Entra External ID handles its own validation. We just need terms
+      // acceptance; the upstream flow gathers name / email / password.
+      if (!agreedToTerms) { setError("Please agree to the Terms of Service"); return }
+      setIsLoading(true)
+      try {
+        await signIn("signUp")
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Sign-up failed.")
+        setIsLoading(false)
+      }
+      return
+    }
+
+    // Fallback (localStorage mock) — identical UX to pre-Phase-2.
     if (formData.password !== formData.confirmPassword) { setError("Passwords do not match"); return }
     if (formData.password.length < 8) { setError("Password must be at least 8 characters"); return }
     if (!agreedToTerms) { setError("Please agree to the Terms of Service"); return }
     setIsLoading(true)
     await new Promise(resolve => setTimeout(resolve, 1000))
-    localStorage.setItem("promoshop_user", JSON.stringify({ email: formData.email, firstName: formData.firstName, lastName: formData.lastName, company: formData.company, phone: formData.phone }))
+    setFallbackUser({
+      email: formData.email,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      company: formData.company,
+      phone: formData.phone,
+    })
     localStorage.setItem("promoshop_quote_contact", JSON.stringify({ firstName: formData.firstName, lastName: formData.lastName, email: formData.email, phone: formData.phone, company: formData.company, jobTitle: "" }))
-    router.push("/my-quote")
+    router.push(redirectTarget)
     setIsLoading(false)
   }
 

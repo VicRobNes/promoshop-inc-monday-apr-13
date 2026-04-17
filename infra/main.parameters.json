@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environmentName": {
+      "value": "${AZURE_ENV_NAME}"
+    },
+    "location": {
+      "value": "${AZURE_LOCATION=canadacentral}"
+    },
+    "principalId": {
+      "value": "${AZURE_PRINCIPAL_ID=}"
+    },
+    "principalType": {
+      "value": "${AZURE_PRINCIPAL_TYPE=User}"
+    },
+    "externalIdTenantId": {
+      "value": "${EXTERNAL_ID_TENANT_ID=}"
+    },
+    "externalIdTenantDomain": {
+      "value": "${EXTERNAL_ID_TENANT_DOMAIN=}"
+    },
+    "externalIdClientId": {
+      "value": "${EXTERNAL_ID_CLIENT_ID=}"
+    },
+    "externalIdUserFlowName": {
+      "value": "${EXTERNAL_ID_USER_FLOW_NAME=B2C_1_signupsignin}"
+    }
+  }
+}

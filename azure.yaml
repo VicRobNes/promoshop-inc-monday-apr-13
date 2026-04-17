@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+
+name: promoshop
+metadata:
+  template: promoshop@0.0.1-phase0
+
+# Infrastructure as Code configuration
+infra:
+  provider: bicep
+  path: infra
+  module: main
+
+# Services are declared as placeholders for future phases:
+# - web: Next.js frontend hosted on Azure Static Web Apps (wired in Phase 0 deploy workflow)
+# - api: Azure Functions backend (wired in Phase 4)
+services:
+  web:
+    project: "."
+    language: ts
+    host: staticwebapp
+    dist: .next
+  api:
+    project: "./api"
+    language: ts
+    host: function

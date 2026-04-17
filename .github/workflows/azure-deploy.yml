@@ -1,0 +1,79 @@
+name: Azure Static Web Apps Deploy
+
+# Phase 0 — deploy the Next.js frontend to the Static Web App created by
+# azure-provision. The Static Web Apps action builds and uploads artefacts
+# using the deployment token stored in the AZURE_STATIC_WEB_APPS_API_TOKEN
+# secret (generated once per provisioned SWA — see phase-0 runbook).
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "docs/**"
+      - "infra/**"
+      - "*.md"
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened, closed]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: azure-deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build_and_deploy:
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    name: Build and deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          lfs: false
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Next.js
+        run: pnpm build
+
+      - name: Deploy to Azure Static Web Apps
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: upload
+          # Paths must match the Bicep staticWebApp module inputs.
+          app_location: "."
+          api_location: "api"
+          output_location: ".next"
+          skip_app_build: false
+
+  close_preview:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    name: Tear down preview environment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close PR preview
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          action: close
