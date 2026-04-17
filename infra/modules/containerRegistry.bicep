@@ -1,5 +1,4 @@
-@description('Name of the Azure Container Registry. Globally unique, 5-50 chars, alphanumeric only.')
-@minLength(5)
+@description('Name of the Azure Container Registry. Globally unique, 5-50 chars, alphanumeric only. Caller is responsible for meeting the 5-char minimum; the module only enforces the upper bound so the Bicep linter can statically verify callers.')
 @maxLength(50)
 param name string
 

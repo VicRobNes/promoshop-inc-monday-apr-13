@@ -1,0 +1,74 @@
+name: Azure Provision (azd)
+
+# Phase 0 — provision the foundation infra defined in infra/*.bicep.
+# Triggered manually via workflow_dispatch so it runs whether your machine is on or not.
+# Uses OIDC federated credentials against the App Registration created in the
+# phase-0 bootstrap runbook (see docs/runbooks/phase-0-bootstrap.md).
+
+on:
+  workflow_dispatch:
+    inputs:
+      environmentName:
+        description: "azd environment name (e.g. dev, staging, prod)"
+        required: true
+        default: "dev"
+      location:
+        description: "Azure region for the resource group"
+        required: false
+        default: "canadacentral"
+
+permissions:
+  id-token: write   # required for OIDC federated credential login
+  contents: read
+
+concurrency:
+  group: azure-provision-${{ github.event.inputs.environmentName }}
+  cancel-in-progress: false
+
+jobs:
+  provision:
+    name: azd provision
+    runs-on: ubuntu-latest
+    env:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      AZURE_ENV_NAME: ${{ github.event.inputs.environmentName }}
+      AZURE_LOCATION: ${{ github.event.inputs.location }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Azure Developer CLI (azd)
+        uses: Azure/setup-azd@v2.0.0
+
+      - name: Log in to Azure with azd (OIDC federated)
+        run: |
+          azd auth login \
+            --client-id "$AZURE_CLIENT_ID" \
+            --federated-credential-provider "github" \
+            --tenant-id "$AZURE_TENANT_ID"
+
+      - name: Initialise azd environment (idempotent)
+        run: |
+          if ! azd env select "$AZURE_ENV_NAME" 2>/dev/null; then
+            azd env new "$AZURE_ENV_NAME" --location "$AZURE_LOCATION" --subscription "$AZURE_SUBSCRIPTION_ID" --no-prompt
+          fi
+          azd env set AZURE_LOCATION "$AZURE_LOCATION"
+          azd env set AZURE_SUBSCRIPTION_ID "$AZURE_SUBSCRIPTION_ID"
+
+      - name: Provision infrastructure
+        run: azd provision --no-prompt
+
+      - name: Emit deployment outputs
+        if: always()
+        run: |
+          echo "### azd provision outputs" >> "$GITHUB_STEP_SUMMARY"
+          azd env get-values >> "$GITHUB_STEP_SUMMARY" || true
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "To capture the Static Web App deployment token, run:" >> "$GITHUB_STEP_SUMMARY"
+          echo '```bash' >> "$GITHUB_STEP_SUMMARY"
+          echo 'az staticwebapp secrets list --name $(azd env get-value STATIC_WEB_APP_NAME) --query "properties.apiKey" -o tsv' >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          echo "Then set it as the `AZURE_STATIC_WEB_APPS_API_TOKEN` GitHub secret." >> "$GITHUB_STEP_SUMMARY"
