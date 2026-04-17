@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/next'
 import { QuoteProvider } from '@/lib/quote-context'
 import { LocaleProvider } from '@/lib/locale-context'
 import { AuthProvider } from '@/lib/auth/AuthProvider'
+import { ThemeVarsProvider } from '@/components/theme-vars-provider'
 import './globals.css'
 
 const montserrat = Montserrat({ 
@@ -58,7 +59,9 @@ export default function RootLayout({
         <AuthProvider>
           <LocaleProvider>
             <QuoteProvider>
-              {children}
+              <ThemeVarsProvider>
+                {children}
+              </ThemeVarsProvider>
             </QuoteProvider>
           </LocaleProvider>
         </AuthProvider>
