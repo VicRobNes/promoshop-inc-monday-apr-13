@@ -34,13 +34,6 @@ param externalIdClientId string = ''
 @description('Phase 2 — Name of the sign-in/sign-up user flow. Defaults to Entra External ID\'s convention.')
 param externalIdUserFlowName string = 'B2C_1_signupsignin'
 
-// ---------- Budget alert ----------
-@description('Email addresses that receive budget alerts (50/80/100% of $150). Leave empty to skip budget creation.')
-param budgetContactEmails array = []
-
-@description('Monthly budget ceiling in USD. Kept below the $200 new-account free grant.')
-param budgetAmountUsd int = 150
-
 // ---------- Shared values ----------
 var abbrs = loadJsonContent('abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
@@ -175,19 +168,6 @@ module entraExternalId 'modules/entraExternalId.bicep' = {
     preProvisionedClientId: externalIdClientId
     userFlowName: externalIdUserFlowName
     keyVaultName: keyVault.outputs.name
-  }
-}
-
-// ---------- Subscription-scope budget alert ----------
-// Only created when at least one contact email is provided — otherwise the
-// budget would have nowhere to send alerts.
-module budget 'modules/budget.bicep' = if (!empty(budgetContactEmails)) {
-  name: 'promoshopBudget'
-  scope: subscription()
-  params: {
-    name: 'promoshop-${environmentName}-monthly-budget'
-    amount: budgetAmountUsd
-    contactEmails: budgetContactEmails
   }
 }
 
