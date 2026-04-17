@@ -1,11 +1,12 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useMemo } from "react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { X, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react"
+import { X, ChevronLeft, ChevronRight, Maximize2, Check } from "lucide-react"
 import type { Product, ProductColour } from "@/lib/products"
 import { useQuote } from "@/lib/quote-context"
+import { useAuth } from "@/lib/auth/AuthProvider"
 import { ProductLightbox } from "./product-lightbox"
 
 interface ProductDetailModalProps {
@@ -14,27 +15,46 @@ interface ProductDetailModalProps {
   onClose: () => void
 }
 
+// Multi-select version of the product detail modal — per client feedback
+// (Apr 16), a shopper should be able to pick one or more colours AND one or
+// more sizes in a single action, then have the cross-product added to their
+// quote as individual line items. e.g. navy + (S,M,L,XL) → 4 line items.
+//
+// Unauthenticated guests now hit a sign-up gate on "Add to quote" (client
+// feedback Apr 16). We store a short return-to pointer in sessionStorage so
+// the sign-in page can bring them back to /my-quote after auth succeeds.
 export function ProductDetailModal({ product, isOpen, onClose }: ProductDetailModalProps) {
-  const [selectedColour, setSelectedColour] = useState<ProductColour | null>(null)
-  const [selectedSize, setSelectedSize] = useState<string | null>(null)
+  const [selectedColours, setSelectedColours] = useState<ProductColour[]>([])
+  const [selectedSizes, setSelectedSizes] = useState<string[]>([])
+  const [previewColour, setPreviewColour] = useState<ProductColour | null>(null)
   const [imageIndex, setImageIndex] = useState(0)
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const { addItem } = useQuote()
+  const { isAuthenticated } = useAuth()
   const router = useRouter()
 
-  // Reset selections whenever a new product is opened.
+  // Reset selections whenever a new product is opened. Default-select the
+  // first colour so the image carousel has something to show immediately;
+  // sizes start empty so the customer makes an explicit choice.
   useEffect(() => {
     if (product && product.colours.length > 0) {
-      setSelectedColour(product.colours[0])
-      setSelectedSize(null)
+      const first = product.colours[0]
+      setSelectedColours([first])
+      setPreviewColour(first)
+      setSelectedSizes([])
+      setImageIndex(0)
+    } else {
+      setSelectedColours([])
+      setPreviewColour(null)
+      setSelectedSizes([])
       setImageIndex(0)
     }
   }, [product])
 
-  // Reset the image carousel when the colour changes.
+  // Reset the image carousel when the preview colour changes.
   useEffect(() => {
     setImageIndex(0)
-  }, [selectedColour])
+  }, [previewColour])
 
   useEffect(() => {
     if (isOpen) {
@@ -47,7 +67,7 @@ export function ProductDetailModal({ product, isOpen, onClose }: ProductDetailMo
     }
   }, [isOpen])
 
-  const images = selectedColour?.images ?? product?.colours[0]?.images ?? []
+  const images = previewColour?.images ?? product?.colours[0]?.images ?? []
 
   const goPrev = useCallback(() => {
     if (images.length === 0) return
@@ -71,20 +91,63 @@ export function ProductDetailModal({ product, isOpen, onClose }: ProductDetailMo
     return () => window.removeEventListener("keydown", handler)
   }, [isOpen, lightboxOpen, goPrev, goNext, onClose])
 
+  const toggleColour = (colour: ProductColour) => {
+    setSelectedColours((prev) => {
+      const exists = prev.some((c) => c.name === colour.name)
+      const next = exists ? prev.filter((c) => c.name !== colour.name) : [...prev, colour]
+      // Keep the carousel pointing at something sensible.
+      if (!exists) {
+        setPreviewColour(colour)
+      } else if (previewColour?.name === colour.name) {
+        setPreviewColour(next[0] ?? null)
+      }
+      return next
+    })
+  }
+
+  const toggleSize = (size: string) => {
+    setSelectedSizes((prev) =>
+      prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size],
+    )
+  }
+
+  const totalCombinations = useMemo(
+    () => selectedColours.length * selectedSizes.length,
+    [selectedColours.length, selectedSizes.length],
+  )
+  const canAdd = totalCombinations > 0
+
   if (!product || !isOpen) return null
 
-  const canAdd = Boolean(selectedColour && selectedSize)
-
   const handleAddToQuote = () => {
-    if (!canAdd || !selectedColour || !selectedSize) return
-    addItem({
-      productSku: product.sku,
-      productName: product.name,
-      colour: selectedColour.name,
-      size: selectedSize,
-      quantity: 1,
-      image: selectedColour.images[0] ?? "",
-    })
+    if (!canAdd) return
+
+    // Sign-up gate for unauthenticated visitors. Save a return pointer so
+    // sign-in can bring them straight to /my-quote after success.
+    if (!isAuthenticated) {
+      try {
+        sessionStorage.setItem("promoshop_post_auth_redirect", "/my-quote")
+      } catch {
+        // sessionStorage unavailable (private mode) — redirect still works.
+      }
+      onClose()
+      router.push("/sign-up?redirect=/my-quote")
+      return
+    }
+
+    // Fan out the cartesian product as individual quote line items.
+    for (const colour of selectedColours) {
+      for (const size of selectedSizes) {
+        addItem({
+          productSku: product.sku,
+          productName: product.name,
+          colour: colour.name,
+          size,
+          quantity: 1,
+          image: colour.images[0] ?? "",
+        })
+      }
+    }
     onClose()
     router.push("/my-quote")
   }
@@ -119,7 +182,7 @@ export function ProductDetailModal({ product, isOpen, onClose }: ProductDetailMo
                 >
                   <Image
                     src={images[imageIndex]}
-                    alt={`${product.name} - ${selectedColour?.name ?? ""} (${imageIndex + 1}/${images.length})`}
+                    alt={`${product.name} - ${previewColour?.name ?? ""} (${imageIndex + 1}/${images.length})`}
                     fill
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, 55vw"
@@ -184,42 +247,58 @@ export function ProductDetailModal({ product, isOpen, onClose }: ProductDetailMo
               {product.name}
             </h2>
 
-            {/* Colour Selection */}
+            {/* Colour Selection (multi-select). Clicking adds/removes; the
+                coloured chips below list every selected colour. */}
             <div className="mb-7">
               <p className="text-sm text-[#111] mb-3.5">
-                Select your colour: <strong>{selectedColour?.name || ""}</strong>
+                Select your colours:{" "}
+                <strong>
+                  {selectedColours.length > 0
+                    ? selectedColours.map((c) => c.name).join(", ")
+                    : "none yet"}
+                </strong>
               </p>
               <div className="flex flex-wrap gap-2.5">
-                {product.colours.map((colour, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedColour(colour)}
-                    aria-label={colour.name}
-                    className={`w-11 h-11 rounded-full border-2 transition-all duration-200 flex-shrink-0 hover:scale-105 ${
-                      selectedColour?.name === colour.name
-                        ? "border-black shadow-[0_0_0_3px_#ededed,0_0_0_5px_#000]"
-                        : "border-black/10"
-                    }`}
-                    style={{ backgroundColor: colour.hex }}
-                    title={colour.name}
-                  />
-                ))}
+                {product.colours.map((colour, index) => {
+                  const active = selectedColours.some((c) => c.name === colour.name)
+                  return (
+                    <button
+                      key={index}
+                      onClick={() => toggleColour(colour)}
+                      onMouseEnter={() => active && setPreviewColour(colour)}
+                      aria-label={colour.name}
+                      aria-pressed={active}
+                      className={`relative w-11 h-11 rounded-full border-2 transition-all duration-200 flex-shrink-0 hover:scale-105 ${
+                        active
+                          ? "border-black shadow-[0_0_0_3px_#ededed,0_0_0_5px_#000]"
+                          : "border-black/10"
+                      }`}
+                      style={{ backgroundColor: colour.hex }}
+                      title={colour.name}
+                    >
+                      {active && (
+                        <Check className="w-4 h-4 absolute inset-0 m-auto text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]" aria-hidden="true" />
+                      )}
+                    </button>
+                  )
+                })}
               </div>
             </div>
 
-            {/* Size Selection */}
+            {/* Size Selection (multi-select). */}
             <div className="mb-7">
               <p className="text-sm text-[#111] mb-3">
-                Select your size{selectedSize ? <>: <strong>{selectedSize}</strong></> : null}
+                Select your sizes{selectedSizes.length > 0 ? <>: <strong>{selectedSizes.join(", ")}</strong></> : null}
               </p>
               <div className="flex flex-wrap gap-2">
                 {product.sizes.map((size, index) => {
-                  const active = selectedSize === size
+                  const active = selectedSizes.includes(size)
                   return (
                     <button
                       key={index}
                       type="button"
-                      onClick={() => setSelectedSize(size)}
+                      onClick={() => toggleSize(size)}
+                      aria-pressed={active}
                       className={`px-5 py-2.5 border rounded text-sm font-medium uppercase tracking-wide transition-colors ${
                         active
                           ? "border-black bg-black text-white"
@@ -242,10 +321,12 @@ export function ProductDetailModal({ product, isOpen, onClose }: ProductDetailMo
                 canAdd ? "bg-black text-white hover:opacity-80" : "bg-[#bbb] text-white cursor-not-allowed"
               }`}
             >
-              Add to Quote
+              {canAdd
+                ? `Add ${totalCombinations} item${totalCombinations === 1 ? "" : "s"} to Quote`
+                : "Add to Quote"}
             </button>
             <p className={`text-xs text-[#777] mb-5 ${canAdd ? "invisible" : ""}`}>
-              Pick a colour and size to add this product to your quote.
+              Pick at least one colour and one size. Each combination is added as its own line item.
             </p>
 
             {/* Description */}
@@ -276,7 +357,7 @@ export function ProductDetailModal({ product, isOpen, onClose }: ProductDetailMo
         initialIndex={imageIndex}
         onClose={() => setLightboxOpen(false)}
         onIndexChange={setImageIndex}
-        title={`${product.name}${selectedColour ? ` \u2014 ${selectedColour.name}` : ""}`}
+        title={`${product.name}${previewColour ? ` \u2014 ${previewColour.name}` : ""}`}
       />
     </>
   )

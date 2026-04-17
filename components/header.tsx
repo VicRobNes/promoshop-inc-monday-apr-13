@@ -44,15 +44,18 @@ export function Header() {
       >
         CAN
       </button>
-      <a
-        href="https://www.promoshopusa.com"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Visit PromoShop USA website"
-        className="px-3 py-1 text-[10px] font-bold tracking-wider uppercase rounded-full transition-colors text-[#373a36] hover:text-[#ef473f]"
+      <button
+        type="button"
+        onClick={() => setLocale("USA")}
+        aria-pressed={locale === "USA"}
+        className={`px-3 py-1 text-[10px] font-bold tracking-wider uppercase rounded-full transition-colors ${
+          locale === "USA"
+            ? "bg-[#ef473f] text-white"
+            : "text-[#373a36] hover:text-[#ef473f]"
+        }`}
       >
         USA
-      </a>
+      </button>
     </div>
   )
 
@@ -89,13 +92,14 @@ export function Header() {
       <nav className="mx-auto max-w-7xl flex items-center justify-between px-6 py-3 lg:py-4 lg:px-8 border-b border-[#e5e5e5]">
         {/* Logo — the newly-provided PromoShop studio mark */}
         <Link href="/" className="flex-shrink-0">
+          {/* Logo bumped per client feedback (Apr 16): "seems strangely small right now". */}
           <SiteImage
             imageId="site.logo"
             defaultSrc={HOME_CONTENT.hero.logo}
             alt={HOME_CONTENT.hero.logoAlt}
-            width={220}
-            height={72}
-            className="h-14 lg:h-16 w-auto"
+            width={320}
+            height={110}
+            className="h-20 lg:h-24 w-auto"
             priority
           />
         </Link>
