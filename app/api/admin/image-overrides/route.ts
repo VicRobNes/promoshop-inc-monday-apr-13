@@ -3,12 +3,34 @@ import {
   getAllOverrides,
   setOverride,
 } from "@/lib/db/repositories/imageRegistry"
+import { getSessionFromRequest, hasRole } from "@/lib/auth/server"
 
-// PHASE 2: require admin role (Entra External ID role claim check here).
-// For now this route is open so Phase 1 can ship a working data layer while
-// auth wiring is still being built.
+// Phase 2 admin guard: every method requires a session whose `roles` array
+// includes `admin`. The middleware at the repo root performs the same check;
+// keeping an in-handler guard here as defence-in-depth (direct invocation,
+// static-export deployments, etc.).
+async function requireAdmin(
+  request: Request,
+): Promise<NextResponse | null> {
+  const session = await getSessionFromRequest(request)
+  if (!session) {
+    return NextResponse.json(
+      { error: "Unauthorized — sign in with an admin account." },
+      { status: 401 },
+    )
+  }
+  if (!hasRole(session, "admin")) {
+    return NextResponse.json(
+      { error: "Forbidden — admin role required." },
+      { status: 403 },
+    )
+  }
+  return null
+}
 
-export async function GET(): Promise<NextResponse> {
+export async function GET(request: Request): Promise<NextResponse> {
+  const denied = await requireAdmin(request)
+  if (denied) return denied
   try {
     const overrides = await getAllOverrides()
     return NextResponse.json(overrides)
@@ -27,7 +49,9 @@ interface PutBody {
 }
 
 export async function PUT(request: Request): Promise<NextResponse> {
-  // PHASE 2: require admin role
+  const denied = await requireAdmin(request)
+  if (denied) return denied
+
   let body: PutBody
   try {
     body = (await request.json()) as PutBody

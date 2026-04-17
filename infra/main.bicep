@@ -21,6 +21,19 @@ param principalId string = ''
 ])
 param principalType string = 'User'
 
+// ---------- Phase 2: Entra External ID parameters ----------
+@description('Phase 2 — Tenant ID of the Entra External ID (CIAM) tenant. Portal-only bootstrap; leave empty until docs/runbooks/phase-2-auth.md has been walked.')
+param externalIdTenantId string = ''
+
+@description('Phase 2 — Domain of the Entra External ID tenant (e.g. promoshop.ciamlogin.com). Leave empty to keep placeholder outputs.')
+param externalIdTenantDomain string = ''
+
+@description('Phase 2 — App (client) ID of the SPA App Registration in the External ID tenant. Provision via az CLI (see runbook) and pass it here on the next `azd provision`.')
+param externalIdClientId string = ''
+
+@description('Phase 2 — Name of the sign-in/sign-up user flow. Defaults to Entra External ID\'s convention.')
+param externalIdUserFlowName string = 'B2C_1_signupsignin'
+
 // ---------- Shared values ----------
 var abbrs = loadJsonContent('abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
@@ -147,6 +160,25 @@ module managedIdentity 'modules/managedIdentity.bicep' = {
   }
 }
 
+// ---------- Phase 2: Entra External ID (CIAM) ----------
+// Pass-through module: emits AUTH_CLIENT_ID / AUTH_AUTHORITY outputs that are
+// either the real values (once the tenant + App Registration have been
+// provisioned out-of-band via the runbook) or placeholders. The module also
+// persists the two values into Key Vault so SWA + GitHub Actions can pull
+// them without a checked-in secret.
+module entraExternalId 'modules/entraExternalId.bicep' = {
+  name: 'entraExternalId'
+  scope: resourceGroup
+  params: {
+    environmentName: environmentName
+    externalIdTenantId: externalIdTenantId
+    externalIdTenantDomain: externalIdTenantDomain
+    preProvisionedClientId: externalIdClientId
+    userFlowName: externalIdUserFlowName
+    keyVaultName: keyVault.outputs.name
+  }
+}
+
 // ---------- Optional: grant the deploying principal Contributor on the RG ----------
 var rgContributorRoleId = 'b24988ac-6180-42a0-ab88-20f7382dd24c'
 
@@ -221,3 +253,13 @@ output MANAGED_IDENTITY_CLIENT_ID string = managedIdentity.outputs.clientId
 
 @description('Principal (object) ID of the managed identity.')
 output MANAGED_IDENTITY_PRINCIPAL_ID string = managedIdentity.outputs.principalId
+
+// ---------- Phase 2: Entra External ID outputs ----------
+@description('Phase 2 — App (client) ID of the SPA App Registration. Empty until runbook is walked.')
+output AUTH_CLIENT_ID string = entraExternalId.outputs.AUTH_CLIENT_ID
+
+@description('Phase 2 — OIDC authority URL for MSAL.')
+output AUTH_AUTHORITY string = entraExternalId.outputs.AUTH_AUTHORITY
+
+@description('Phase 2 — Redirect URIs that should be registered on the App Registration SPA platform.')
+output AUTH_REDIRECT_URIS array = entraExternalId.outputs.REDIRECT_URIS

@@ -25,6 +25,8 @@ import {
   clearOverride,
   type ImageOverrides,
 } from "@/lib/image-overrides"
+import { useAuth } from "@/lib/auth/AuthProvider"
+import { useAdminGuard } from "@/lib/auth/useAdminGuard"
 
 const MAX_UPLOAD_BYTES = 2.5 * 1024 * 1024 // 2.5 MB — localStorage typically caps ~5MB total.
 
@@ -40,6 +42,15 @@ function groupSlots(slots: ImageSlot[]): Record<string, ImageSlot[]> {
 }
 
 export function AdminImagePanel() {
+  const { roles, mode } = useAuth()
+  const isAdmin = roles.includes("admin")
+  // In MSAL mode enforce the guard (redirects to /sign-in if not admin).
+  // In fallback mode the middleware can't check a JWT, so we leave the panel
+  // open for dev — matches the pre-Phase-2 behaviour and keeps design work
+  // frictionless.
+  useAdminGuard({ role: "admin", redirectTo: "/sign-in" })
+  const guardActive = mode === "msal" && !isAdmin
+
   const [overrides, setOverrides] = useState<ImageOverrides>({})
   const [search, setSearch] = useState("")
   const [mounted, setMounted] = useState(false)
@@ -110,6 +121,12 @@ export function AdminImagePanel() {
     ) {
       resetAllOverrides()
     }
+  }
+
+  if (guardActive) {
+    // Guard hook is already redirecting — render nothing so the admin UI
+    // doesn't flash for non-admin signed-in users.
+    return null
   }
 
   return (

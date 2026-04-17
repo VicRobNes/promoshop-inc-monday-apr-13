@@ -13,6 +13,18 @@
     },
     "principalType": {
       "value": "${AZURE_PRINCIPAL_TYPE=User}"
+    },
+    "externalIdTenantId": {
+      "value": "${EXTERNAL_ID_TENANT_ID=}"
+    },
+    "externalIdTenantDomain": {
+      "value": "${EXTERNAL_ID_TENANT_DOMAIN=}"
+    },
+    "externalIdClientId": {
+      "value": "${EXTERNAL_ID_CLIENT_ID=}"
+    },
+    "externalIdUserFlowName": {
+      "value": "${EXTERNAL_ID_USER_FLOW_NAME=B2C_1_signupsignin}"
     }
   }
 }
