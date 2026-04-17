@@ -6,8 +6,6 @@ import { BrandLogoScroll } from "@/components/brand-logo-scroll"
 import { ContactSection } from "@/components/contact-section"
 import { HeroSlideshow } from "@/components/home/hero-slideshow"
 import { HOME_CONTENT } from "@/lib/cms/home"
-import { TEAM_MEMBERS } from "@/lib/cms/team"
-import { TeamMemberAvatar } from "@/components/team-member-avatar"
 
 export default function HomePage() {
   return (
@@ -59,31 +57,9 @@ export default function HomePage() {
       {/* Brand Logo Scroll */}
       <BrandLogoScroll />
 
-      {/* Meet Our Team */}
-      <section className="py-16 lg:py-20 px-6 lg:px-8 bg-[#111111]">
-        <div className="mx-auto max-w-7xl">
-          <div className="text-center mb-12">
-            <h2 className="font-montserrat font-bold text-2xl lg:text-3xl text-white mb-3">
-              Meet Our Team
-            </h2>
-            <p className="text-[#888] font-visby max-w-xl mx-auto">
-              These industry experts will ensure your promotions shine.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {TEAM_MEMBERS.map((member) => (
-              <div key={member.name} className="text-center group">
-                <div className="w-28 h-28 mx-auto mb-4 rounded-full bg-[#1a1a1a] flex items-center justify-center border-2 border-[#333] group-hover:border-[#ef473f] transition-colors overflow-hidden">
-                  <TeamMemberAvatar member={member} size={112} />
-                </div>
-                <h3 className="font-montserrat font-bold text-sm text-white">{member.name}</h3>
-                <p className="text-xs text-[#ef473f] font-bold uppercase tracking-wider mt-1">{member.role}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* "Meet Our Team" removed from the home page per client feedback
+          (Apr 16): keep it on the About page only so visitors land directly on
+          the brand narrative, not the roster. */}
 
       {/* Contact Section */}
       <ContactSection />

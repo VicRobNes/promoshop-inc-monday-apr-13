@@ -27,6 +27,15 @@ export function brandLogoId(slug: string): string {
   return `brand.${slug}.logo`
 }
 
+/**
+ * Image slot for a brand-page lifestyle hero. Renders behind the logo on
+ * `/brands/[slug]` per client feedback (Apr 16). Empty default — the page
+ * falls back to a gradient when no image is set.
+ */
+export function brandLifestyleId(slug: string): string {
+  return `brand.${slug}.lifestyle`
+}
+
 function buildRegistry(): ImageSlot[] {
   const slots: ImageSlot[] = []
 
@@ -75,6 +84,13 @@ function buildRegistry(): ImageSlot[] {
       group: "Brand logos",
       defaultSrc: brand.logoUrl ?? "",
       hint: brand.featured ? "Featured brand" : undefined,
+    })
+    slots.push({
+      id: brandLifestyleId(brand.slug),
+      label: `${brand.name} — lifestyle background`,
+      group: "Brand lifestyle",
+      defaultSrc: "",
+      hint: "Large hero image behind the brand logo on /brands/{slug}. Landscape 1600x600+ works best.",
     })
   })
 

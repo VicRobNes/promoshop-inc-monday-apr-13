@@ -8,27 +8,30 @@ import { useImageSrc } from "@/hooks/use-image-src"
 export function BrandLogoScroll() {
   const brands = BRANDS
 
+  // Tile — no borders, no background. Logo floats directly on the sky-blue
+  // (#bde7ff) banner per client feedback (Apr 16). Falls back to brand name
+  // only when the image hasn't loaded yet.
   const Tile = ({ brand, tileKey }: { brand: (typeof brands)[0]; tileKey: string }) => {
     const id = brandLogoId(brand.slug)
     const src = useImageSrc(id, brand.logoUrl ?? "")
     return (
       <div
         key={tileKey}
-        className="flex-shrink-0 mx-6 flex items-center justify-center"
+        className="flex-shrink-0 mx-10 flex items-center justify-center"
       >
-        <div className="w-36 h-16 flex items-center justify-center bg-[#1a1a1a] rounded-lg px-3 border border-[#333] shadow-sm">
+        <div className="h-16 flex items-center justify-center px-3">
           {src ? (
             <SiteImage
               imageId={id}
               defaultSrc={brand.logoUrl ?? ""}
               alt={brand.name}
-              width={120}
-              height={48}
-              className="max-h-10 w-auto object-contain brightness-0 invert"
+              width={160}
+              height={64}
+              className="max-h-14 w-auto object-contain"
               unoptimized
             />
           ) : (
-            <span className="text-white/60 font-bold text-xs tracking-wider uppercase whitespace-nowrap">
+            <span className="text-[#373a36]/70 font-bold text-xs tracking-wider uppercase whitespace-nowrap">
               {brand.name}
             </span>
           )}
@@ -38,11 +41,11 @@ export function BrandLogoScroll() {
   }
 
   return (
-    <section className="py-8 bg-[#0d0d0d] border-y border-[#2a2a2a] overflow-hidden">
+    <section className="py-10 bg-[#bde7ff] overflow-hidden">
       <div className="relative">
-        {/* Gradient overlays */}
-        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#0d0d0d] to-transparent z-10" />
-        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#0d0d0d] to-transparent z-10" />
+        {/* Soft fade at the edges so the scroll doesn't feel hard-cut. */}
+        <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[#bde7ff] to-transparent z-10" />
+        <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[#bde7ff] to-transparent z-10" />
 
         {/* Scrolling container */}
         <div className="flex animate-scroll">
