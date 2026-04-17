@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Trash2, Plus, Save, RotateCcw } from "lucide-react"
+import { Trash2, Plus, Save, RotateCcw, ImageOff } from "lucide-react"
 import { BRANDS } from "@/lib/brands"
 import type { Brand } from "@/lib/brands"
 import {
@@ -142,13 +142,36 @@ export function AdminBrandsPanel() {
                 <Trash2 className="w-4 h-4" />
               </button>
             </div>
-            <input
-              type="text"
-              value={brand.logoUrl ?? ""}
-              onChange={(e) => handleChange(brand.slug, { logoUrl: e.target.value })}
-              placeholder="Logo URL"
-              className="w-full text-xs text-[#666] bg-transparent border border-[#e5e5e5] rounded px-2 py-1.5 focus:border-[#ef473f] focus:outline-none"
-            />
+
+            {/* Logo preview + URL field side-by-side so admins see exactly
+                what the brand scroll / brand page will render. */}
+            <div className="flex items-center gap-3">
+              <div className="w-20 h-16 flex-shrink-0 rounded bg-[#bde7ff]/40 border border-[#e5e5e5] flex items-center justify-center overflow-hidden">
+                {brand.logoUrl ? (
+                  // next/image can't hotlink arbitrary origins without config,
+                  // so for live admin previews we use a plain <img>.
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={brand.logoUrl}
+                    alt={`${brand.name} logo preview`}
+                    className="max-h-12 w-auto object-contain"
+                  />
+                ) : (
+                  <ImageOff className="w-5 h-5 text-[#999]" />
+                )}
+              </div>
+              <input
+                type="text"
+                value={brand.logoUrl ?? ""}
+                onChange={(e) => handleChange(brand.slug, { logoUrl: e.target.value })}
+                placeholder="Logo URL — paste a public image URL here"
+                className="flex-1 text-xs text-[#666] bg-transparent border border-[#e5e5e5] rounded px-2 py-1.5 focus:border-[#ef473f] focus:outline-none"
+              />
+            </div>
+            <p className="text-[10px] text-[#999] -mt-2">
+              Don&apos;t have a URL? Go to the <strong>Images</strong> tab and upload
+              a file under &ldquo;Brand logos&rdquo; → {brand.name}.
+            </p>
             <textarea
               value={brand.description}
               onChange={(e) => handleChange(brand.slug, { description: e.target.value })}

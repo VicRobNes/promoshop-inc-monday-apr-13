@@ -173,17 +173,22 @@ function SignInPageInner() {
         </div>
       </div>
 
-      {/* Right Panel - Branding */}
+      {/* Right Panel - Branding.
+          PS logo was invisible on the black panel (dark-on-dark). Wrapping
+          it in a white rounded card gives it a proper carrier the way real
+          brand marks sit on dark hero sections. */}
       <div className="hidden lg:flex flex-1 bg-[#0d0d0d] border-l border-[#2a2a2a] items-center justify-center p-12">
         <div className="max-w-md text-center">
-          <Image
-            src="/images/mainmemory/promoshop-logo.png"
-            alt="PromoShop Studio"
-            width={260}
-            height={86}
-            className="h-20 w-auto mx-auto mb-8"
-            unoptimized
-          />
+          <div className="inline-flex items-center justify-center bg-white rounded-2xl px-8 py-6 mb-8 shadow-[0_0_0_1px_rgba(255,255,255,0.06)]">
+            <Image
+              src="/images/mainmemory/promoshop-logo.png"
+              alt="PromoShop Studio"
+              width={260}
+              height={86}
+              className="h-16 w-auto"
+              unoptimized
+            />
+          </div>
           <h2 className="font-montserrat font-bold text-2xl text-white mb-4">
             Premium Branded Merchandise
           </h2>

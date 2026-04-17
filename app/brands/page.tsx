@@ -40,8 +40,10 @@ export default function BrandsPage() {
             <p className="text-xs font-bold tracking-wider text-[#ef473f] uppercase mb-4">
               Our Partners
             </p>
-            <h1 className="font-montserrat font-bold text-3xl lg:text-5xl text-[#1a1a1a] leading-tight mb-4">
-              Premium Brands We Work With
+            {/* Heading renamed per Abigail's Apr 15 list: "PREMIUM BRANDS WE
+                WORK WITH" → "MEET OUR BRANDS" all-caps. */}
+            <h1 className="font-montserrat font-bold text-3xl lg:text-5xl text-[#1a1a1a] leading-tight mb-4 uppercase tracking-wide">
+              Meet Our Brands
             </h1>
             <p className="text-base text-[#666] leading-relaxed font-visby mb-8">
               We partner with the world&apos;s best brands to bring you quality promotional products 
