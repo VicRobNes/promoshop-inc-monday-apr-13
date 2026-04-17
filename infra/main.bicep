@@ -34,6 +34,13 @@ param externalIdClientId string = ''
 @description('Phase 2 — Name of the sign-in/sign-up user flow. Defaults to Entra External ID\'s convention.')
 param externalIdUserFlowName string = 'B2C_1_signupsignin'
 
+// ---------- Budget alert ----------
+@description('Email addresses that receive budget alerts (50/80/100% of $150). Leave empty to skip budget creation.')
+param budgetContactEmails array = []
+
+@description('Monthly budget ceiling in USD. Kept below the $200 new-account free grant.')
+param budgetAmountUsd int = 150
+
 // ---------- Shared values ----------
 var abbrs = loadJsonContent('abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
@@ -132,19 +139,11 @@ module staticWebApp 'modules/staticWebApp.bicep' = {
 }
 
 // ---------- Container Registry ----------
-// Derived container registry name — ACR requires 5-50 alphanumeric-only chars.
-// Abbreviation + literal "pshop" guarantees >= 7 chars even before adding env + token.
-var containerRegistryName = take(toLower(replace('${abbrs.containerRegistryRegistries}pshop${environmentName}${resourceToken}', '-', '')), 50)
-
-module containerRegistry 'modules/containerRegistry.bicep' = {
-  name: 'containerRegistry'
-  scope: resourceGroup
-  params: {
-    name: containerRegistryName
-    location: location
-    tags: tags
-  }
-}
+// Intentionally not provisioned in main.bicep. Azure Container Registry has
+// NO free tier — even Basic SKU bills ~$5/mo fixed regardless of use, which
+// conflicts with the "zero out-of-pocket" constraint. The module at
+// `modules/containerRegistry.bicep` is kept for future opt-in (e.g. if a
+// Container Apps phase lands and the cost is justified) but is not wired in.
 
 // ---------- Managed identity + RBAC ----------
 module managedIdentity 'modules/managedIdentity.bicep' = {
@@ -176,6 +175,19 @@ module entraExternalId 'modules/entraExternalId.bicep' = {
     preProvisionedClientId: externalIdClientId
     userFlowName: externalIdUserFlowName
     keyVaultName: keyVault.outputs.name
+  }
+}
+
+// ---------- Subscription-scope budget alert ----------
+// Only created when at least one contact email is provided — otherwise the
+// budget would have nowhere to send alerts.
+module budget 'modules/budget.bicep' = if (!empty(budgetContactEmails)) {
+  name: 'promoshopBudget'
+  scope: subscription()
+  params: {
+    name: 'promoshop-${environmentName}-monthly-budget'
+    amount: budgetAmountUsd
+    contactEmails: budgetContactEmails
   }
 }
 
@@ -238,12 +250,6 @@ output STATIC_WEB_APP_HOSTNAME string = staticWebApp.outputs.defaultHostname
 
 @description('Static Web App resource name — use this with `az staticwebapp secrets list` to fetch the deployment token.')
 output STATIC_WEB_APP_NAME string = staticWebApp.outputs.name
-
-@description('Resource ID of the Container Registry.')
-output CONTAINER_REGISTRY_ID string = containerRegistry.outputs.id
-
-@description('Container Registry login server.')
-output CONTAINER_REGISTRY_LOGIN_SERVER string = containerRegistry.outputs.loginServer
 
 @description('Resource ID of the user-assigned managed identity.')
 output MANAGED_IDENTITY_ID string = managedIdentity.outputs.id

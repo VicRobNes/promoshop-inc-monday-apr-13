@@ -60,15 +60,15 @@ function readServerEnv(): ServerAuthEnv {
     process.env.AUTH_AUDIENCE ??
     process.env.NEXT_PUBLIC_AUTH_CLIENT_ID ??
     ""
-  // Allow the mock bypass any time the JWT validator isn't fully configured,
-  // AND whenever NODE_ENV is 'development' or 'test'. Production deploys with
-  // both values set will never hit the bypass.
+  // Mock bypass is allowed ONLY when the validator is unconfigured AND we're
+  // not running in production. A misconfigured production deploy must fail
+  // closed — otherwise anyone could send `x-mock-admin: 1` and become admin.
   const notConfigured = !authority || !audience
   const nonProd = process.env.NODE_ENV !== "production"
   return {
     authority,
     audience,
-    mockAdminAllowed: notConfigured || nonProd,
+    mockAdminAllowed: notConfigured && nonProd,
   }
 }
 

@@ -7,8 +7,8 @@ param location string
 @description('Tags applied to the workspace.')
 param tags object
 
-@description('Daily ingestion cap in GB. -1 disables the cap.')
-param dailyQuotaGb int = -1
+@description('Daily ingestion cap in GB. Defaults to 5, which matches the always-free monthly quota for Azure Monitor / Log Analytics. Set higher deliberately only if you accept the per-GB ingestion charge.')
+param dailyQuotaGb int = 5
 
 @description('Retention period in days.')
 @minValue(30)
