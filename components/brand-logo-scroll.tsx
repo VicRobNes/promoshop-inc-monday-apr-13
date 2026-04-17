@@ -9,8 +9,10 @@ export function BrandLogoScroll() {
   const brands = BRANDS
 
   // Tile — no borders, no background. Logo floats directly on the sky-blue
-  // (#bde7ff) banner per client feedback (Apr 16). Falls back to brand name
-  // only when the image hasn't loaded yet.
+  // (#bde7ff) banner per client feedback (Apr 16). When a brand hasn't had
+  // a logo uploaded yet we fall back to a neutral wordmark sized + weighted
+  // to sit harmoniously next to real logos — so a half-populated scroll
+  // still reads as a cohesive row rather than a broken state.
   const Tile = ({ brand, tileKey }: { brand: (typeof brands)[0]; tileKey: string }) => {
     const id = brandLogoId(brand.slug)
     const src = useImageSrc(id, brand.logoUrl ?? "")
@@ -25,13 +27,13 @@ export function BrandLogoScroll() {
               imageId={id}
               defaultSrc={brand.logoUrl ?? ""}
               alt={brand.name}
-              width={160}
-              height={64}
+              width={180}
+              height={72}
               className="max-h-14 w-auto object-contain"
               unoptimized
             />
           ) : (
-            <span className="text-[#373a36]/70 font-bold text-xs tracking-wider uppercase whitespace-nowrap">
+            <span className="font-bebas text-3xl tracking-[0.12em] uppercase text-[#1a1f2a] whitespace-nowrap">
               {brand.name}
             </span>
           )}
