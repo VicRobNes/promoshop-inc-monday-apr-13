@@ -71,11 +71,10 @@ resource account 'Microsoft.DocumentDB/databaseAccounts@2024-05-15' = {
         isZoneRedundant: false
       }
     ]
-    capabilities: [
-      {
-        name: 'EnableServerless'
-      }
-    ]
+    // Free-tier (enableFreeTier: true) requires provisioned throughput; it's
+    // mutually exclusive with the EnableServerless capability. Free-tier gives
+    // us 1000 RU/s + 25 GB always-free, which comfortably covers PromoShop.
+    capabilities: []
     backupPolicy: {
       type: 'Periodic'
       periodicModeProperties: {
@@ -94,6 +93,13 @@ resource database 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2024-05-15
   properties: {
     resource: {
       id: databaseName
+    }
+    // Shared database-level throughput. The always-free tier covers the first
+    // 1000 RU/s + 25 GB per subscription; by putting throughput at the DB
+    // level, all containers share that allocation instead of each allocating
+    // the 400 RU/s minimum independently.
+    options: {
+      throughput: 1000
     }
   }
 }

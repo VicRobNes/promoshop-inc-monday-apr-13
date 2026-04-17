@@ -63,9 +63,9 @@ export function buildMsalConfig(env: AuthEnv = readAuthEnv()): Configuration {
       cacheLocation: "localStorage",
       storeAuthStateInCookie: false,
     },
-    system: {
-      allowNativeBroker: false,
-    },
+    // `system.allowNativeBroker` was removed from @azure/msal-browser v4's
+    // BrowserSystemOptions — adding it back causes TS2353. WAM/native broker
+    // is off by default in SPAs anyway, so no replacement is needed.
   }
 }
 

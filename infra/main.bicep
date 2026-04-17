@@ -132,19 +132,11 @@ module staticWebApp 'modules/staticWebApp.bicep' = {
 }
 
 // ---------- Container Registry ----------
-// Derived container registry name — ACR requires 5-50 alphanumeric-only chars.
-// Abbreviation + literal "pshop" guarantees >= 7 chars even before adding env + token.
-var containerRegistryName = take(toLower(replace('${abbrs.containerRegistryRegistries}pshop${environmentName}${resourceToken}', '-', '')), 50)
-
-module containerRegistry 'modules/containerRegistry.bicep' = {
-  name: 'containerRegistry'
-  scope: resourceGroup
-  params: {
-    name: containerRegistryName
-    location: location
-    tags: tags
-  }
-}
+// Intentionally not provisioned in main.bicep. Azure Container Registry has
+// NO free tier — even Basic SKU bills ~$5/mo fixed regardless of use, which
+// conflicts with the "zero out-of-pocket" constraint. The module at
+// `modules/containerRegistry.bicep` is kept for future opt-in (e.g. if a
+// Container Apps phase lands and the cost is justified) but is not wired in.
 
 // ---------- Managed identity + RBAC ----------
 module managedIdentity 'modules/managedIdentity.bicep' = {
@@ -238,12 +230,6 @@ output STATIC_WEB_APP_HOSTNAME string = staticWebApp.outputs.defaultHostname
 
 @description('Static Web App resource name — use this with `az staticwebapp secrets list` to fetch the deployment token.')
 output STATIC_WEB_APP_NAME string = staticWebApp.outputs.name
-
-@description('Resource ID of the Container Registry.')
-output CONTAINER_REGISTRY_ID string = containerRegistry.outputs.id
-
-@description('Container Registry login server.')
-output CONTAINER_REGISTRY_LOGIN_SERVER string = containerRegistry.outputs.loginServer
 
 @description('Resource ID of the user-assigned managed identity.')
 output MANAGED_IDENTITY_ID string = managedIdentity.outputs.id
