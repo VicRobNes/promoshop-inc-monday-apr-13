@@ -4,6 +4,9 @@ import { getSessionFromRequest, hasRole } from "@/lib/auth/server"
 /**
  * Phase 2 — route guard for `/admin/*` + `/api/admin/*`.
  *
+ * In Next 16 the `middleware.ts` file convention was renamed to `proxy.ts`;
+ * the shape of the exported function and the `config.matcher` are unchanged.
+ *
  * Strategy:
  *  1. Browser requests to `/admin/**` → redirect to `/sign-in?redirect=...`
  *     when the session is missing or isn't admin. Prevents the UI flash.
@@ -13,7 +16,7 @@ import { getSessionFromRequest, hasRole } from "@/lib/auth/server"
  * Validation is delegated to `getSessionFromRequest` (JWT + JWKS), which
  * honours `x-mock-admin: 1` in non-prod so dev/smoke workflows keep working.
  */
-export async function middleware(req: NextRequest): Promise<NextResponse> {
+export async function proxy(req: NextRequest): Promise<NextResponse> {
   const { pathname, search } = req.nextUrl
   const isApi = pathname.startsWith("/api/admin")
   const isAdmin = pathname.startsWith("/admin") || isApi
