@@ -1,19 +1,54 @@
-// Phase 0 — Foundation infrastructure for PromoShop.
-// Creates the resource group and all Tier-1 resources required by later phases.
+// Production infrastructure for PromoShop on Azure.
+//
+// Single resource group, managed-identity-centric. Hosting is App Service
+// Linux running `next start` directly (SWA Next.js hybrid is still labeled
+// preview in Microsoft's docs and the Next 16 `proxy.ts` convention isn't
+// in SWA's build-preset; we don't take that tail risk for a production
+// client deploy).
+//
+// Topology:
+//
+//   rg-promoshop-${env}
+//     ├─ Log Analytics workspace  (90-day retention, 5 GB/day ingest cap)
+//     ├─ Application Insights     (workspace-linked)
+//     ├─ Key Vault                (soft-delete 90d + purge protect, RBAC auth)
+//     ├─ Storage Account          (shared-key OFF, blob public OFF, TLS 1.2)
+//     ├─ Cosmos DB                (free tier, 1000 RU/s shared, 7-day backup)
+//     ├─ User-assigned MI         (KV Secrets Officer, Blob Data Contributor,
+//     │                             Cosmos SQL Data Contributor)
+//     ├─ App Service Plan (Linux, P0v3) + Web App (Node 22, next start)
+//     ├─ Action Group + availability test + metric alerts      (opt-in)
+//     ├─ Custom domain binding + managed cert                  (opt-in)
+//     └─ (Entra External ID: portal-bootstrapped; IDs pushed to Key Vault)
+//
+//   subscription/
+//     └─ Consumption budget ($ amount, 50/80/100% alerts)      (opt-in)
+//
+// Opt-in knobs (all optional; module is not instantiated when empty):
+//   - `budgetContactEmails`  → enables budget
+//   - `alertContactEmails`   → enables alerts
+//   - `customDomainName`     → enables domain binding + managed cert
+//   - `grantDeployPrincipalRgContributor` → grants RG-Contributor to
+//     `principalId` (default false — follows least-privilege even for dev).
+
 targetScope = 'subscription'
 
-@description('Short environment name (e.g. dev, staging, prod). Forms part of resource names.')
+// ---------- Core parameters ------------------------------------------------
+@description('Short environment name (e.g. dev, staging, prod). Forms part of resource names + drives alwaysOn + hosting SKU defaults.')
 @minLength(1)
 @maxLength(16)
 param environmentName string
 
-@description('Azure region for all resources. Defaults to Canada Central.')
+@description('Azure region for non-App-Service resources. Defaults to Canada Central.')
 param location string = 'canadacentral'
 
-@description('AAD object ID of the human user (or service principal) running azd — receives contributor RBAC on the RG so they can manage resources post-deploy. Leave empty to skip.')
+@description('Azure region for the App Service. Canada Central is supported as of 2024; keep in sync with `location` unless the client needs a specific region.')
+param appServiceLocation string = 'canadacentral'
+
+@description('AAD object ID of the human or SP running azd. Only receives RBAC when `grantDeployPrincipalRgContributor` is true. Empty to skip.')
 param principalId string = ''
 
-@description('Type of the deploying principal. Defaults to "User"; set to "ServicePrincipal" when running in CI.')
+@description('Type of the deploying principal.')
 @allowed([
   'User'
   'Group'
@@ -21,42 +56,67 @@ param principalId string = ''
 ])
 param principalType string = 'User'
 
-// ---------- Phase 2: Entra External ID parameters ----------
-@description('Phase 2 — Tenant ID of the Entra External ID (CIAM) tenant. Portal-only bootstrap; leave empty until docs/runbooks/phase-2-auth.md has been walked.')
+@description('Explicit opt-in to grant the deploying principal Contributor on the RG. Default false for least privilege — production deploys should rely on resource-scoped roles assigned out-of-band.')
+param grantDeployPrincipalRgContributor bool = false
+
+// ---------- Hosting SKU knob ----------------------------------------------
+@description('App Service Plan SKU. P0v3 is the smallest production-grade tier (SLA + zone redundancy option). Use B1 only for non-prod smoke tests.')
+@allowed([
+  'B1'
+  'P0v3'
+  'P1v3'
+  'P2v3'
+])
+param appServiceSkuName string = 'P0v3'
+
+// ---------- Phase 2: Entra External ID -----------------------------------
+@description('Phase 2 — Tenant ID of the Entra External ID (CIAM) tenant. Portal-only bootstrap; leave empty until docs/runbooks/phase-2-auth.md is walked.')
 param externalIdTenantId string = ''
 
-@description('Phase 2 — Domain of the Entra External ID tenant (e.g. promoshop.ciamlogin.com). Leave empty to keep placeholder outputs.')
+@description('Phase 2 — Domain of the External ID tenant (e.g. promoshop.ciamlogin.com).')
 param externalIdTenantDomain string = ''
 
-@description('Phase 2 — App (client) ID of the SPA App Registration in the External ID tenant. Provision via az CLI (see runbook) and pass it here on the next `azd provision`.')
+@description('Phase 2 — App (client) ID of the SPA App Registration.')
 param externalIdClientId string = ''
 
-@description('Phase 2 — Name of the sign-in/sign-up user flow. Defaults to Entra External ID\'s convention.')
+@description('Phase 2 — Name of the sign-in/sign-up user flow.')
 param externalIdUserFlowName string = 'B2C_1_signupsignin'
 
-// ---------- Shared values ----------
+// ---------- Observability + cost-control opt-ins --------------------------
+@description('Email addresses that receive budget alerts (50/80/100%). Leave empty to skip budget creation.')
+param budgetContactEmails array = []
+
+@description('Monthly budget ceiling in USD. Fires a 100% alert before it is exceeded.')
+@minValue(10)
+@maxValue(100000)
+param budgetAmountUsd int = 150
+
+@description('Email addresses that receive App Insights alerts (availability, 5xx, CPU). Leave empty to skip.')
+param alertContactEmails array = []
+
+// ---------- Custom-domain opt-ins -----------------------------------------
+@description('Custom domain to bind to the App Service, e.g. `www.promoshop.com`. Leave empty to skip. Requires the registrar-side CNAME + (for apex domains) TXT verification record to be in place BEFORE `azd provision`; see production-go-live runbook.')
+param customDomainName string = ''
+
+// ---------- Shared values -------------------------------------------------
 var abbrs = loadJsonContent('abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
 
 var tags = {
   'azd-env-name': environmentName
   project: 'promoshop'
-  phase: '0-foundation'
+  environment: environmentName
   managedBy: 'azd'
 }
 
-// Static Web App is only available in a subset of regions; Canada Central is not one.
-// Choose the nearest available region (Central US) for SWA while the rest stay in canadacentral.
-var staticWebAppLocation = 'centralus'
-
-// ---------- Resource group ----------
+// ---------- Resource group ------------------------------------------------
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2023-07-01' = {
   name: 'rg-promoshop-${environmentName}'
   location: location
   tags: tags
 }
 
-// ---------- Observability ----------
+// ---------- Observability -------------------------------------------------
 module logAnalytics 'modules/logAnalytics.bicep' = {
   name: 'logAnalytics'
   scope: resourceGroup
@@ -78,31 +138,29 @@ module appInsights 'modules/appInsights.bicep' = {
   }
 }
 
-// ---------- Secrets ----------
+// ---------- Secrets -------------------------------------------------------
 module keyVault 'modules/keyVault.bicep' = {
   name: 'keyVault'
   scope: resourceGroup
   params: {
-    // Key Vault names: 3-24 chars, alphanumeric + hyphens, globally unique.
     name: take('${abbrs.keyVaultVaults}pshop-${environmentName}-${resourceToken}', 24)
     location: location
     tags: tags
   }
 }
 
-// ---------- Storage ----------
+// ---------- Storage -------------------------------------------------------
 module storage 'modules/storage.bicep' = {
   name: 'storage'
   scope: resourceGroup
   params: {
-    // Storage names: 3-24 chars, lowercase alphanumeric only (no hyphens).
     name: take(toLower('${abbrs.storageStorageAccounts}pshop${environmentName}${resourceToken}'), 24)
     location: location
     tags: tags
   }
 }
 
-// ---------- Database ----------
+// ---------- Database ------------------------------------------------------
 module cosmos 'modules/cosmos.bicep' = {
   name: 'cosmos'
   scope: resourceGroup
@@ -113,32 +171,7 @@ module cosmos 'modules/cosmos.bicep' = {
   }
 }
 
-// ---------- Static Web App (frontend host) ----------
-module staticWebApp 'modules/staticWebApp.bicep' = {
-  name: 'staticWebApp'
-  scope: resourceGroup
-  params: {
-    name: '${abbrs.webStaticSites}promoshop-${environmentName}-${resourceToken}'
-    location: staticWebAppLocation
-    tags: tags
-    // Repo URL intentionally blank: deployment token flow is used (see azure-deploy.yml).
-    repositoryUrl: ''
-    branch: 'main'
-    appLocation: '.'
-    apiLocation: 'api'
-    outputLocation: '.next'
-    skipAppBuild: false
-  }
-}
-
-// ---------- Container Registry ----------
-// Intentionally not provisioned in main.bicep. Azure Container Registry has
-// NO free tier — even Basic SKU bills ~$5/mo fixed regardless of use, which
-// conflicts with the "zero out-of-pocket" constraint. The module at
-// `modules/containerRegistry.bicep` is kept for future opt-in (e.g. if a
-// Container Apps phase lands and the cost is justified) but is not wired in.
-
-// ---------- Managed identity + RBAC ----------
+// ---------- Managed identity + resource-scoped RBAC -----------------------
 module managedIdentity 'modules/managedIdentity.bicep' = {
   name: 'managedIdentity'
   scope: resourceGroup
@@ -152,12 +185,7 @@ module managedIdentity 'modules/managedIdentity.bicep' = {
   }
 }
 
-// ---------- Phase 2: Entra External ID (CIAM) ----------
-// Pass-through module: emits AUTH_CLIENT_ID / AUTH_AUTHORITY outputs that are
-// either the real values (once the tenant + App Registration have been
-// provisioned out-of-band via the runbook) or placeholders. The module also
-// persists the two values into Key Vault so SWA + GitHub Actions can pull
-// them without a checked-in secret.
+// ---------- Phase 2: Entra External ID (CIAM) ----------------------------
 module entraExternalId 'modules/entraExternalId.bicep' = {
   name: 'entraExternalId'
   scope: resourceGroup
@@ -171,10 +199,73 @@ module entraExternalId 'modules/entraExternalId.bicep' = {
   }
 }
 
+// ---------- Hosting: App Service ------------------------------------------
+// P1v3+ allows zone redundancy. P0v3 is single-zone but HA-shaped.
+var canZoneRedundant = !(appServiceSkuName == 'B1' || appServiceSkuName == 'P0v3')
+
+module appService 'modules/appService.bicep' = {
+  name: 'appService'
+  scope: resourceGroup
+  params: {
+    planName: '${abbrs.webServerFarms}promoshop-${environmentName}-${resourceToken}'
+    siteName: '${abbrs.webSitesAppService}promoshop-${environmentName}-${resourceToken}'
+    location: appServiceLocation
+    tags: tags
+    skuName: appServiceSkuName
+    userAssignedIdentityId: managedIdentity.outputs.id
+    appInsightsConnectionString: appInsights.outputs.connectionString
+    cosmosEndpoint: cosmos.outputs.documentEndpoint
+    cosmosDatabaseName: cosmos.outputs.databaseName
+    storageAccountName: storage.outputs.name
+    keyVaultUri: keyVault.outputs.vaultUri
+    isProduction: environmentName == 'prod'
+    zoneRedundant: canZoneRedundant
+  }
+}
+
+// ---------- Alerts (opt-in when alertContactEmails is populated) ---------
+module alerts 'modules/alerts.bicep' = if (!empty(alertContactEmails)) {
+  name: 'alerts'
+  scope: resourceGroup
+  params: {
+    environmentName: environmentName
+    location: 'global'
+    tags: tags
+    appServiceId: appService.outputs.id
+    siteUrl: 'https://${appService.outputs.defaultHostname}/'
+    appInsightsId: appInsights.outputs.id
+    appInsightsLocation: location
+    contactEmails: alertContactEmails
+  }
+}
+
+// ---------- Custom domain + managed cert (opt-in) ------------------------
+module customDomain 'modules/customDomain.bicep' = if (!empty(customDomainName)) {
+  name: 'customDomain'
+  scope: resourceGroup
+  params: {
+    siteName: appService.outputs.name
+    domain: customDomainName
+    location: appServiceLocation
+    tags: tags
+  }
+}
+
+// ---------- Subscription-scope budget (opt-in) ---------------------------
+module budget 'modules/budget.bicep' = if (!empty(budgetContactEmails)) {
+  name: 'promoshopBudget'
+  scope: subscription()
+  params: {
+    name: 'promoshop-${environmentName}-monthly-budget'
+    amount: budgetAmountUsd
+    contactEmails: budgetContactEmails
+  }
+}
+
 // ---------- Optional: grant the deploying principal Contributor on the RG ----------
 var rgContributorRoleId = 'b24988ac-6180-42a0-ab88-20f7382dd24c'
 
-module principalRgContributor 'modules/roleAssignment.bicep' = if (!empty(principalId)) {
+module principalRgContributor 'modules/roleAssignment.bicep' = if (grantDeployPrincipalRgContributor && !empty(principalId)) {
   name: 'principalRgContributor'
   scope: resourceGroup
   params: {
@@ -185,11 +276,11 @@ module principalRgContributor 'modules/roleAssignment.bicep' = if (!empty(princi
   }
 }
 
-// ---------- Outputs ----------
-@description('Name of the resource group that holds all Phase 0 resources.')
+// ---------- Outputs -------------------------------------------------------
+@description('Name of the resource group that holds all foundation resources.')
 output AZURE_RESOURCE_GROUP string = resourceGroup.name
 
-@description('Azure region the resources were deployed into.')
+@description('Azure region non-hosting resources were deployed into.')
 output AZURE_LOCATION string = location
 
 @description('Resource ID of the Log Analytics workspace.')
@@ -210,11 +301,11 @@ output KEY_VAULT_URI string = keyVault.outputs.vaultUri
 @description('Resource ID of the Storage Account.')
 output STORAGE_ACCOUNT_ID string = storage.outputs.id
 
-@description('Primary blob endpoint of the Storage Account.')
-output STORAGE_BLOB_ENDPOINT string = storage.outputs.primaryBlobEndpoint
+@description('Storage account name — pass as AZURE_STORAGE_ACCOUNT at runtime.')
+output STORAGE_ACCOUNT_NAME string = storage.outputs.name
 
-@description('Primary file endpoint of the Storage Account.')
-output STORAGE_FILE_ENDPOINT string = storage.outputs.primaryFileEndpoint
+@description('Primary blob endpoint.')
+output STORAGE_BLOB_ENDPOINT string = storage.outputs.primaryBlobEndpoint
 
 @description('Resource ID of the Cosmos DB account.')
 output COSMOS_ACCOUNT_ID string = cosmos.outputs.id
@@ -222,14 +313,14 @@ output COSMOS_ACCOUNT_ID string = cosmos.outputs.id
 @description('Cosmos DB document endpoint URI.')
 output COSMOS_DOCUMENT_ENDPOINT string = cosmos.outputs.documentEndpoint
 
-@description('Resource ID of the Static Web App.')
-output STATIC_WEB_APP_ID string = staticWebApp.outputs.id
+@description('Resource ID of the App Service site.')
+output APP_SERVICE_ID string = appService.outputs.id
 
-@description('Static Web App default hostname.')
-output STATIC_WEB_APP_HOSTNAME string = staticWebApp.outputs.defaultHostname
+@description('App Service name — use with `az webapp deploy` and `az webapp config`.')
+output APP_SERVICE_NAME string = appService.outputs.name
 
-@description('Static Web App resource name — use this with `az staticwebapp secrets list` to fetch the deployment token.')
-output STATIC_WEB_APP_NAME string = staticWebApp.outputs.name
+@description('Default hostname of the App Service.')
+output APP_SERVICE_HOSTNAME string = appService.outputs.defaultHostname
 
 @description('Resource ID of the user-assigned managed identity.')
 output MANAGED_IDENTITY_ID string = managedIdentity.outputs.id
@@ -240,12 +331,11 @@ output MANAGED_IDENTITY_CLIENT_ID string = managedIdentity.outputs.clientId
 @description('Principal (object) ID of the managed identity.')
 output MANAGED_IDENTITY_PRINCIPAL_ID string = managedIdentity.outputs.principalId
 
-// ---------- Phase 2: Entra External ID outputs ----------
-@description('Phase 2 — App (client) ID of the SPA App Registration. Empty until runbook is walked.')
+@description('App (client) ID of the SPA App Registration. Empty until the Entra External ID runbook is walked.')
 output AUTH_CLIENT_ID string = entraExternalId.outputs.AUTH_CLIENT_ID
 
-@description('Phase 2 — OIDC authority URL for MSAL.')
+@description('OIDC authority URL for MSAL.')
 output AUTH_AUTHORITY string = entraExternalId.outputs.AUTH_AUTHORITY
 
-@description('Phase 2 — Redirect URIs that should be registered on the App Registration SPA platform.')
+@description('Redirect URIs that should be registered on the App Registration SPA platform.')
 output AUTH_REDIRECT_URIS array = entraExternalId.outputs.REDIRECT_URIS

@@ -51,7 +51,14 @@ resource storage 'Microsoft.Storage/storageAccounts@2023-05-01' = {
   properties: {
     accessTier: 'Hot'
     allowBlobPublicAccess: false
-    allowSharedKeyAccess: true
+    // Shared-key access disabled in production. The site's blob.ts adapter
+    // falls through to DefaultAzureCredential + user-delegation-key SAS
+    // minting when `AZURE_STORAGE_CONNECTION_STRING` is absent, which is
+    // the production configuration. The only consumer that needs shared
+    // keys is the one-shot `scripts/migrate-images.ts` dev utility, which
+    // is expected to be pointed at a local account or a temporarily re-
+    // enabled staging account.
+    allowSharedKeyAccess: false
     defaultToOAuthAuthentication: true
     supportsHttpsTrafficOnly: true
     minimumTlsVersion: 'TLS1_2'

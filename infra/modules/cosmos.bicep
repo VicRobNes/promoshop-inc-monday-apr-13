@@ -76,10 +76,14 @@ resource account 'Microsoft.DocumentDB/databaseAccounts@2024-05-15' = {
     // us 1000 RU/s + 25 GB always-free, which comfortably covers PromoShop.
     capabilities: []
     backupPolicy: {
+      // Production-grade periodic backup: 4-hour interval, 7-day retention
+      // (168 h). Free-tier Cosmos only supports Local redundancy — that's a
+      // service constraint, not a choice. If the workload ever grows past
+      // what the free tier covers, also flip storage redundancy to Geo.
       type: 'Periodic'
       periodicModeProperties: {
         backupIntervalInMinutes: 240
-        backupRetentionIntervalInHours: 8
+        backupRetentionIntervalInHours: 168
         backupStorageRedundancy: 'Local'
       }
     }
