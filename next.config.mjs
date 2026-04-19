@@ -1,8 +1,9 @@
 /** @type {import('next').NextConfig} */
+// Next 16 moved ESLint configuration out of next.config.mjs — `pnpm lint`
+// invokes `eslint .` directly via the npm-script in package.json, so there's
+// nothing to gate here. The previous `eslint: { ignoreDuringBuilds: true }`
+// block fired a deprecation warning on every dev start.
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -19,14 +20,10 @@ const nextConfig = {
         hostname: 'hebbkx1anhila5yf.public.blob.vercel-storage.com',
         pathname: '/**',
       },
-      {
-        // Raw assets committed to VicRobNes/mainmemory (Promoshop logo,
-        // slideshow photos, storefront image). Used by lib/cms/home.ts and
-        // lib/cms/about.ts until the admin dashboard uploads replace them.
-        protocol: 'https',
-        hostname: 'raw.githubusercontent.com',
-        pathname: '/VicRobNes/mainmemory/**',
-      },
+      // Previously whitelisted raw.githubusercontent.com/VicRobNes/mainmemory
+      // for logo / slideshow / storefront photos. Those assets now live in
+      // this repo's `public/images/mainmemory/` folder, so the remote
+      // allowance is dead config and has been removed.
       {
         // GitHub user-attachment images (brand logos, team photos uploaded
         // via issue/PR comments or the CMS upload flow).
