@@ -17,7 +17,10 @@ param storageAccountId string = ''
 param cosmosAccountName string = ''
 
 // Well-known built-in Azure RBAC role definition IDs (GUID only).
-var keyVaultSecretsOfficerRoleId = 'b86a8fe4-44ce-4948-aee5-eccb2c155cd7'
+// The app reads secrets at runtime; secret *writes* happen at deploy time
+// under the deploying principal's credentials, so "Secrets User" (read only)
+// is the least-privilege runtime role.
+var keyVaultSecretsUserRoleId = '4633458b-17de-408a-b874-0445c86b69e6'
 var storageBlobDataContributorRoleId = 'ba92f5b4-2d11-453d-a403-e96b0029c9fe'
 // Cosmos DB "SQL Built-in Data Contributor" (data plane role, assigned via sqlRoleAssignments)
 var cosmosSqlDataContributorRoleId = '00000000-0000-0000-0000-000000000002'
@@ -41,13 +44,13 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2024-05-15' existi
   name: cosmosAccountName
 }
 
-resource keyVaultSecretsOfficer 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (!empty(keyVaultId)) {
-  name: guid(keyVaultId, identity.id, keyVaultSecretsOfficerRoleId)
+resource keyVaultSecretsUser 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (!empty(keyVaultId)) {
+  name: guid(keyVaultId, identity.id, keyVaultSecretsUserRoleId)
   scope: keyVault
   properties: {
     principalId: identity.properties.principalId
     principalType: 'ServicePrincipal'
-    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', keyVaultSecretsOfficerRoleId)
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', keyVaultSecretsUserRoleId)
   }
 }
 

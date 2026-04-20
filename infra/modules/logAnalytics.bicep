@@ -10,10 +10,10 @@ param tags object
 @description('Daily ingestion cap in GB. Defaults to 5, which matches the always-free monthly quota for Azure Monitor / Log Analytics. Set higher deliberately only if you accept the per-GB ingestion charge.')
 param dailyQuotaGb int = 5
 
-@description('Retention period in days.')
+@description('Retention period in days. 90 matches the default production window and costs nothing extra on the PerGB2018 SKU (which includes 31 days free; day 32+ billed the same per-GB regardless of retention until 730 days).')
 @minValue(30)
 @maxValue(730)
-param retentionInDays int = 30
+param retentionInDays int = 90
 
 resource workspace 'Microsoft.OperationalInsights/workspaces@2022-10-01' = {
   name: name
